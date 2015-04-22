@@ -10,13 +10,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 /**
  * @author robin
  * @date 2015-4-20
  * Copyright 2015 The robin . All rights reserved
  */
-public abstract class BaseActivity extends ActionBarActivity implements
+public abstract class BaseActivity extends FragmentActivity implements
 		OnSharedPreferenceChangeListener {
 
 	protected static String TAG ;
@@ -25,6 +25,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	protected Sputil sputil;
 	protected Resources mResources;
 	protected Context mContext;
+	
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -49,7 +50,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		sputil.getInstance().registerOnSharedPreferenceChangeListener(this);
 		mResources = getResources();
 	}
-	
 	
 	public abstract void setContentView();  
 	  
