@@ -6,8 +6,6 @@ import cn.bmob.v3.Bmob;
 
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 
 public abstract class BasePageActivity extends BaseActivity{
@@ -20,9 +18,7 @@ public abstract class BasePageActivity extends BaseActivity{
 		setLayoutView();
 		init(bundle);
 	}
-//////
 	private void init(Bundle bundle) {
-		// TODO Auto-generated method stub
 		findViews();
 		setupViews(bundle);
 		setListener();
