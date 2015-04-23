@@ -4,7 +4,11 @@ package com.bishe.ui;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import android.app.ActionBar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.view.Window;
 
@@ -18,7 +22,6 @@ import com.bishe.ui.base.BaseActivity;
  */
 public class MainActivity extends BaseActivity {
 
-	@Override
 	public void setContentView() {
 		setContentView(R.layout.activity_main);
 		setOverflowShowingAlways();
@@ -47,6 +50,12 @@ public class MainActivity extends BaseActivity {
 		return super.onMenuOpened(featureId, menu);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		redictToActivity(mContext, TestActivity.class, null);
+		return super.onOptionsItemSelected(item);
+	}
 	private void setOverflowShowingAlways() {
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
@@ -57,30 +66,6 @@ public class MainActivity extends BaseActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void initViews() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void initListeners() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void initData() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void fetchData() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

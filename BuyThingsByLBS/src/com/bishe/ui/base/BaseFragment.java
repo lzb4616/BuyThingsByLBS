@@ -7,6 +7,8 @@ import com.bishe.utils.Sputil;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 /**
  * @author robin
@@ -27,4 +29,5 @@ public class BaseFragment extends Fragment {
 			sputil = new Sputil(mContext, Constant.SP_NAME);
 		}
 	}
+	
 }

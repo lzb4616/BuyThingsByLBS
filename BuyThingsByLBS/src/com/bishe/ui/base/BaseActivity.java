@@ -6,6 +6,7 @@ import com.bishe.utils.Sputil;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
@@ -30,12 +31,8 @@ public abstract class BaseActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		setContentView();
 		TAG = this.getClass().getSimpleName();
 		initConfigure();
-		initData();
-		initViews();
-		initListeners();
 	}
 	
 	private void initConfigure() {
@@ -50,17 +47,21 @@ public abstract class BaseActivity extends FragmentActivity implements
 		sputil.getInstance().registerOnSharedPreferenceChangeListener(this);
 		mResources = getResources();
 	}
+    
+	/**
+	 * Activity跳转
+	 * @param context
+	 * @param targetActivity
+	 * @param bundle
+	 */
+	public void redictToActivity(Context context,Class<?> targetActivity,Bundle bundle){
+		Intent intent = new Intent(context, targetActivity);
+		if(null != bundle){
+			intent.putExtras(bundle);
+		}
+		startActivity(intent);
+	}
 	
-	public abstract void setContentView();  
-	  
-    public abstract void initViews();  
-  
-    public abstract void initListeners();  
-  
-    public abstract void initData();  
-    
-    public abstract void fetchData();
-    
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
