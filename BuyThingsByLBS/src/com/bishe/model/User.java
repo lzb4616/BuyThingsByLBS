@@ -12,7 +12,7 @@ public class User extends BmobUser{
 	private String signature;
 	private BmobFile avatar;
 	private BmobRelation favorite;
-	private BmobGeoPoint location;
+	private Location location;
 	private String sex;
 	
 	
@@ -34,10 +34,10 @@ public class User extends BmobUser{
 	public void setFavorite(BmobRelation favorite) {
 		this.favorite = favorite;
 	}
-	public BmobGeoPoint getLocation() {
+	public Location getLocation() {
 		return location;
 	}
-	public void setLocation(BmobGeoPoint location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 	public String getSex() {

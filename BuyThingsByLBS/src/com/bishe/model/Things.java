@@ -10,16 +10,22 @@ public class Things extends BmobObject{
 	
 	private User author;
 	private String content;
-	private BmobFile thingsImage;
+	private ThingsImage thingsImage;
 	private int love;
-	private int hate;
 	private int share;
 	private int comment;
 	private boolean isPass;
 	private boolean myFav;//收藏
 	private boolean myLove;//赞
+	private int mPrice;
 	private BmobRelation relation;
 	
+	public int getmPrice() {
+		return mPrice;
+	}
+	public void setmPrice(int mPrice) {
+		this.mPrice = mPrice;
+	}
 	public User getAuthor() {
 		return author;
 	}
@@ -32,10 +38,10 @@ public class Things extends BmobObject{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public BmobFile getThingsImage() {
+	public ThingsImage getThingsImage() {
 		return thingsImage;
 	}
-	public void setThingsImage(BmobFile thingsImage) {
+	public void setThingsImage(ThingsImage thingsImage) {
 		this.thingsImage = thingsImage;
 	}
 	public int getLove() {
@@ -43,12 +49,6 @@ public class Things extends BmobObject{
 	}
 	public void setLove(int love) {
 		this.love = love;
-	}
-	public int getHate() {
-		return hate;
-	}
-	public void setHate(int hate) {
-		this.hate = hate;
 	}
 	public int getShare() {
 		return share;
@@ -91,7 +91,7 @@ public class Things extends BmobObject{
 	public String toString() {
 		return 	 "Things [author=" + author.toString() + ", content=" + content
 					+ ", thingsImage=" + thingsImage + ", love=" + love
-					+ ", hate=" + hate + ", share=" + share + ", comment="
+					+ ", price=" + mPrice + ", share=" + share + ", comment="
 					+ comment + ", isPass=" + isPass + ", myFav=" + myFav
 					+ ", myLove=" + myLove + ", relation=" + relation + "]";
 	}

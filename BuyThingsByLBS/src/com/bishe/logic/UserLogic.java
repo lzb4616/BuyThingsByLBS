@@ -6,9 +6,11 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import com.bishe.config.Constant;
+import com.bishe.model.Location;
 import com.bishe.model.User;
 import com.bishe.utils.LogUtils;
 
+import android.app.Activity;
 import android.content.Context;
 
 /**
@@ -18,7 +20,7 @@ import android.content.Context;
  */
 public class UserLogic {
 	
-	public static final String TAG = "UserLogin";
+	public static final String TAG = "UserLogic";
 	
 	private Context mContext;
 
@@ -191,7 +193,6 @@ public class UserLogic {
 			
 			@Override
 			public void onSuccess() {
-				// TODO Auto-generated method stub
 				if(resetPasswordListener != null){
 					resetPasswordListener.onResetSuccess();
 				}else{
@@ -201,7 +202,6 @@ public class UserLogic {
 
 			@Override
 			public void onFailure(int arg0, String msg) {
-				// TODO Auto-generated method stub
 				if(resetPasswordListener != null){
 					resetPasswordListener.onResetFailure(msg);
 				}else{
@@ -218,5 +218,7 @@ public class UserLogic {
 	public void setOnResetPasswordListener(IResetPasswordListener resetPasswordListener){
 		this.resetPasswordListener = resetPasswordListener;
 	}
+	
+
 	
 }
