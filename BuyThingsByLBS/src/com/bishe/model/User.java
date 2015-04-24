@@ -13,6 +13,7 @@ public class User extends BmobUser{
 	private BmobFile avatar;
 	private BmobRelation favorite;
 	private Location location;
+	private Double phoneNum;
 	private String sex;
 	
 	
@@ -51,6 +52,12 @@ public class User extends BmobUser{
 	public String toString() {
 		return  "User [signature=" + signature + ", avatar=" + avatar
 				+ ", favorite=" + favorite + ", location=" + location
-				+ ", sex=" + sex +"]";
+				+ ", sex=" + sex +", phoneNum="+phoneNum+"]";
+	}
+	public Double getPhoneNum() {
+		return phoneNum;
+	}
+	public void setPhoneNum(Double phoneNum) {
+		this.phoneNum = phoneNum;
 	}
 }
