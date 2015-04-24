@@ -24,22 +24,12 @@ import com.bishe.utils.ActivityUtils;
  */
 public class TestFram extends BaseHomeFragment {
 
-	@Override
-	protected String actionBarTitle() {
-		// TODO Auto-generated method stub
-		return "测试";
-	}
+
 
 	@Override
 	protected int getMenuRes() {
 		// TODO Auto-generated method stub
 		return R.menu.main_action_menu;
-	}
-
-	@Override
-	protected boolean isHomeAsUpEnabled() {
-		// TODO Auto-generated method stub
-		return true;
 	}
 
 	@Override
@@ -68,7 +58,6 @@ public class TestFram extends BaseHomeFragment {
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-		
 	}
 
 	@Override

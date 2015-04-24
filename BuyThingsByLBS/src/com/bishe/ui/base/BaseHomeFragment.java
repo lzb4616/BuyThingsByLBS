@@ -11,7 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+/**
+ * @author robin
+ * @date 2015-4-21
+ * Copyright 2015 The robin . All rights reserved
+ */
 public abstract class BaseHomeFragment extends BaseFragment{
 	
 	protected ActionBar actionBar;
@@ -26,7 +30,6 @@ public abstract class BaseHomeFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View contentView = inflater.inflate(getLayoutId(),container,false);
-		initActionBar();
 		findViews(contentView);
 		setupViews(savedInstanceState);
 		initListeners();
@@ -34,16 +37,6 @@ public abstract class BaseHomeFragment extends BaseFragment{
 		return contentView;
 	}
 
-
-	private void initActionBar() {
-		actionBar = ((Activity)mContext).getActionBar();
-		if (null != actionBarTitle()) {
-			actionBar.setTitle(actionBarTitle());
-		}
-		actionBar.setDisplayHomeAsUpEnabled(isHomeAsUpEnabled()==true?true:false);
-
-	}
-	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
@@ -56,9 +49,19 @@ public abstract class BaseHomeFragment extends BaseFragment{
 		return super.onOptionsItemSelected(item);
 	}
 	
-	protected abstract String actionBarTitle();
+	protected void setActionBar(String title,Integer logoResId,Boolean isHomeAsUpEnabled)
+	{
+		actionBar = ((Activity)mContext).getActionBar();
+		if (null != title) {
+			actionBar.setTitle(title);
+		}
+		if (null != logoResId) {
+			actionBar.setLogo(logoResId);
+		}
+		actionBar.setDisplayHomeAsUpEnabled(isHomeAsUpEnabled==true?true:false);
+	}
+	
 	protected abstract int getMenuRes();
-	protected abstract boolean isHomeAsUpEnabled();
 	protected abstract void onMenuItemSelected(MenuItem item);
 	protected abstract int getLayoutId();
 	protected abstract void findViews(View view);
@@ -66,5 +69,4 @@ public abstract class BaseHomeFragment extends BaseFragment{
 	protected abstract void initListeners();  
 	protected abstract void initData();  
     
-
 }

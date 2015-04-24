@@ -6,8 +6,11 @@ import cn.bmob.v3.Bmob;
 
 
 import android.os.Bundle;
-
-
+/**
+ * @author robin
+ * @date 2015-4-21
+ * Copyright 2015 The robin . All rights reserved
+ */
 public abstract class BasePageActivity extends BaseActivity{
 
 	@Override

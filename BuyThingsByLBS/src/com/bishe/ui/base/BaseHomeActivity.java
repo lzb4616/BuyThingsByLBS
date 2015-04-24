@@ -15,7 +15,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.ViewConfiguration;
 import android.view.Window;
-
+/**
+ * @author robin
+ * @date 2015-4-21
+ * Copyright 2015 The robin . All rights reserved
+ */
 public abstract class BaseHomeActivity extends BaseActivity{
 	
 	
