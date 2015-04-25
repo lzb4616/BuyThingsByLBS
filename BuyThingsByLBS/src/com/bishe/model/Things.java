@@ -15,15 +15,15 @@ public class Things extends BmobObject {
 	private int comment;
 	private boolean isPass;
 	private boolean myFav;// 收藏
-	private int mPrice;
+	private int price;
 	private BmobRelation relation;
 
-	public int getmPrice() {
-		return mPrice;
+	public int getPrice() {
+		return price;
 	}
 
-	public void setmPrice(int mPrice) {
-		this.mPrice = mPrice;
+	public void setPrice(int price) {
+		this.price =price;
 	}
 
 	public User getAuthor() {
@@ -93,7 +93,7 @@ public class Things extends BmobObject {
 	@Override
 	public String toString() {
 		return "Things [author=" + author.toString() + ", content=" + content
-				+ ", thingsImage=" + thingsImage + ", price=" + mPrice
+				+ ", thingsImage=" + thingsImage + ", price=" + price
 				+ ", share=" + share + ", comment=" + comment + ", isPass="
 				+ isPass + ", myFav=" + myFav + ", relation=" + relation + "]";
 	}

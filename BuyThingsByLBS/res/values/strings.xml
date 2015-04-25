@@ -8,5 +8,6 @@
     <string name="action_main">主页</string>
     <string name="action_my_info">我的信息</string>
     <string name="login_register_title">账号管理</string>
+    <string name="action_publish">发布</string>
 </resources>
                                          
