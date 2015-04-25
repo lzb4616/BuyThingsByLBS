@@ -15,7 +15,6 @@ public abstract class BasePageActivity extends BaseActivity{
 
 	@Override
 	protected void onCreate(Bundle bundle) {
-		// TODO Auto-generated method stub
 		super.onCreate(bundle);
 		Bmob.initialize(this, Constant.BMOB_APP_ID);
 		setLayoutView();

@@ -6,7 +6,7 @@ package com.bishe.config;
  */
 public class Constant {
 	
-	public static final	String BMOB_APP_ID = "";
+	public static final	String BMOB_APP_ID = "2cf59c3792bb0165e09325a59faca27c";
 	
   	public static final String NETWORK_TYPE_WIFI = "wifi";
   	public static final String NETWORK_TYPE_MOBILE = "mobile";

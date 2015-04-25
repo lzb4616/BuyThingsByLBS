@@ -1,4 +1,4 @@
-package com.bishe.ui;
+package com.bishe.ui.activity;
 
 
 import com.bishe.ui.base.BaseFragment;

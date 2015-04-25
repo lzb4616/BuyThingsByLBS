@@ -1,4 +1,4 @@
-package com.bishe.ui;
+package com.bishe.ui.activity;
 
 
 import java.lang.reflect.Field;
@@ -31,7 +31,6 @@ public class MainActivity extends BaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_action_menu, menu);
 		return true;
-		
 	}
 	
 	@Override
@@ -53,7 +52,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		redictToActivity(mContext, TestActivity.class, null);
+		redictToActivity(mContext, LoginAndRegisterActivity.class, null);
 		return super.onOptionsItemSelected(item);
 	}
 	private void setOverflowShowingAlways() {

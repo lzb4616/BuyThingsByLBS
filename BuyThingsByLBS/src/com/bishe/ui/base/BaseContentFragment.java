@@ -73,7 +73,7 @@ public abstract class BaseContentFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		contentView = inflater.inflate(R.layout.fragment_qiangcontent,container,false);
+		contentView = inflater.inflate(R.layout.fragment_listview_main,container,false);
 		mPullRefreshListView = (PullToRefreshListView)contentView
 				.findViewById(R.id.pull_refresh_list);
 		networkTips = (TextView)contentView.findViewById(R.id.networkTips);

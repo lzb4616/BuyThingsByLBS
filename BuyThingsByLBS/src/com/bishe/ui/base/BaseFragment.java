@@ -4,6 +4,7 @@ package com.bishe.ui.base;
 import com.bishe.config.Constant;
 import com.bishe.utils.Sputil;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,7 @@ import android.view.MenuInflater;
  */
 public class BaseFragment extends Fragment {
 	public static String TAG;
-	protected Context mContext;
+	protected Activity mContext;
 	protected Sputil sputil;
 	
 	@Override

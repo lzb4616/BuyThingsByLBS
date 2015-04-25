@@ -7,5 +7,6 @@
     <string name="action_ablout">关于</string>
     <string name="action_main">主页</string>
     <string name="action_my_info">我的信息</string>
+    <string name="login_register_title">账号管理</string>
 </resources>
                                          
