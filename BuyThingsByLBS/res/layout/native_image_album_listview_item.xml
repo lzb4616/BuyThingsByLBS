@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="15dp" 
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:id="@+id/img_photoalbum_item_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_stub" 
+        android:focusable="false"
+        />
+
+    <TextView
+        android:id="@+id/tv_photoalbum_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@id/img_photoalbum_item_image"
+        android:layout_marginLeft="10dp"
+        android:text="所有图片"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_photoalbum_item_image_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_photoalbum_item_name"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/img_photoalbum_item_image"
+        android:layout_marginLeft="10dp"
+        android:text="320"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/chk_photoalbum_isselect"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/check_box_album_press"
+        android:focusable="false"
+        android:button="@null" />
+
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:id="@+id/rl_native_image_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <GridView
+            android:id="@+id/gv_native_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_bottom"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:horizontalSpacing="3dp"
+            android:listSelector="#50000000"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="3dp" 
+            />
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="65dip"
+            android:layout_alignParentBottom="true"
+            android:background="#292929"
+            android:gravity="center_vertical" >
+
+            <Button
+                android:id="@+id/btn_show_image"
+                android:layout_width="100dip"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dip"
+                android:background="@drawable/ssp_queding_btn"
+                android:gravity="center"
+                android:text="所有照片"
+                android:textColor="#f4f4f4"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btn_sure"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:background="@drawable/ssp_queding_btn"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="#f4f4f4"
+                android:textSize="13sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

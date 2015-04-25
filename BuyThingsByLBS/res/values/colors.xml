@@ -2,7 +2,15 @@
 <resources>
 
     <color name="background_tab_pressed">#6633B5E5</color>
-
+    <color name="hint_text_color">#d9d9d9</color>
+    <color name="black">#000000</color>
+    <color name="publish_lay_title_textColor">#50505050</color>
+    <color name="default_grary_background">#F1F1F1</color>
+    <color name="lightgray">#90505050</color>
+    <color name="white">#FFFFFF</color>
+    <color name="lightred">#90FF0000</color>
+    <color name="actionbar_background_color">#303537</color>
+    
     <integer-array name="gplus_colors">
         <item>@color/gplus_color_1</item>
         <item>@color/gplus_color_2</item>
