@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.R.bool;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
