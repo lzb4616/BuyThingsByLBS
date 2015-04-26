@@ -43,7 +43,7 @@ public class ThingsImageLogic {
 		this.mUploadImageListener = imageListener;
 	}
 
-	public void uploadImageWithPath(Vector<String> imagePaths) {
+	public void uploadImageWithPaths(Vector<String> imagePaths) {
 		if (null != imagePaths) {
 			Vector<ThingsImage> thingsImages = new Vector<ThingsImage>();
 			for (String imagePath : imagePaths) {
@@ -54,11 +54,21 @@ public class ThingsImageLogic {
 		}
 	}
 
+	
+	public void upLoadImageWithPath(String imagePath)
+	{
+		if (null != imagePath) {
+			ThingsImage image = new ThingsImage(new File(imagePath));
+			uploadImage(image);
+		}
+	}
+	
 	public void uploadImage(Vector<ThingsImage> imgaes) {
 		for (ThingsImage thingsImage : imgaes) {
 			uploadImage(thingsImage);
 		}
 	}
+
 
 	public void uploadImage(final ThingsImage image) {
 		if (null == image) {
@@ -66,7 +76,7 @@ public class ThingsImageLogic {
 			return;
 		}
 
-		image.uploadblock(mContext, new UploadFileListener() {
+		image.upload(mContext, new UploadFileListener() {
 
 			@Override
 			public void onSuccess() {
@@ -95,7 +105,7 @@ public class ThingsImageLogic {
 				mUploadImageListener.onUploadImageFailure(arg1);
 			}
 		});
-
+		
 	}
 
 	/**

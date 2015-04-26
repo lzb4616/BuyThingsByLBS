@@ -52,8 +52,6 @@ public class ThingsLogic {
 	 */
 	public void publishThings(final Things things)
 	{
-		Assert.assertEquals(null, things);		
-		
 		things.save(mContext, new SaveListener() {
 			
 			@Override

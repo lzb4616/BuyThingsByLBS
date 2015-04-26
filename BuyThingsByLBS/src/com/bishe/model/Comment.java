@@ -8,6 +8,7 @@ public class Comment extends BmobObject {
 
 	private User user;
 	private String commentContent;
+	
 	public User getUser() {
 		return user;
 	}
