@@ -9,5 +9,7 @@
     <string name="action_my_info">我的信息</string>
     <string name="login_register_title">账号管理</string>
     <string name="action_publish">发布</string>
+    <string name="action_login">登录</string>
+    <string name="action_loginOut">退出登录</string>
 </resources>
                                          

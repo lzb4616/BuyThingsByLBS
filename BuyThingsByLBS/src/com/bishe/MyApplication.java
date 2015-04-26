@@ -7,6 +7,7 @@
 package com.bishe;
 import java.io.File;
 
+import com.bishe.model.Things;
 import com.bishe.utils.ActivityManagerUtils;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
@@ -27,6 +28,9 @@ public class MyApplication extends Application {
 	public static String TAG; 
 	
 	public static MyApplication mMyApplication = null;
+	
+	private Things currentThings = null;
+	
 	
 	public static MyApplication getInstance(){
 		return mMyApplication;
@@ -76,5 +80,13 @@ public class MyApplication extends Application {
 		.imageScaleType(ImageScaleType.EXACTLY)
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.build();
+	}
+
+	public Things getCurrentThings() {
+		return currentThings;
+	}
+
+	public void setCurrentThings(Things currentThings) {
+		this.currentThings = currentThings;
 	}
 }

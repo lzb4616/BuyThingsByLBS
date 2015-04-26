@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
-    android:descendantFocusability="blocksDescendants"
     android:padding="8dip" >
 
     <ImageView
@@ -27,10 +26,9 @@
         android:id="@+id/things_distance_text"
         style="@style/TextTheme"
         android:layout_alignBottom="@id/user_logo"
-        android:layout_alignParentRight="true"
         android:layout_alignTop="@id/user_logo"
+        android:layout_alignParentRight="true"
         android:layout_margin="4dp"
-        android:gravity="center_vertical"
         android:text="500米" />
 
     <TextView
@@ -40,7 +38,6 @@
         android:layout_alignTop="@id/user_logo"
         android:layout_margin="4dp"
         android:layout_toLeftOf="@id/things_distance_text"
-        android:gravity="center_vertical"
         android:text="广州" />
 
     <ImageView
@@ -57,85 +54,92 @@
         android:src="@drawable/bg_pic_loading"
         android:visibility="visible" />
 
-    <TextView
-        android:id="@+id/things_price_tv"
-        style="@style/TextTheme"
-        android:layout_below="@id/content_image"
-        android:layout_margin="4dp"
-        android:text="￥" />
+    <RelativeLayout
+        android:id="@+id/things_msg_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/content_image" >
 
-    <TextView
-        android:id="@+id/things_price_text"
-        style="@style/TextTheme"
-        android:layout_below="@id/content_image"
-        android:layout_margin="4dp"
-        android:layout_toRightOf="@id/things_price_tv"
-        android:text="599" />
+        <TextView
+            android:id="@+id/things_price_tv"
+            style="@style/TextTheme"
+            android:layout_margin="4dp"
+            android:text="￥" />
 
-    <TextView
-        android:id="@+id/user_phoneNum_text"
-        style="@style/TextTheme"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/content_image"
-        android:layout_margin="4dp"
-        android:text="18888888888" />
+        <TextView
+            android:id="@+id/things_price_text"
+            style="@style/TextTheme"
+            android:layout_margin="4dp"
+            android:layout_toRightOf="@id/things_price_tv"
+            android:text="599" />
 
-    <TextView
-        android:id="@+id/things_phone_text"
-        style="@style/TextTheme"
-        android:layout_below="@id/content_image"
-        android:layout_margin="4dp"
-        android:layout_toLeftOf="@id/user_phoneNum_text"
-        android:text="TellPhone-" />
+        <TextView
+            android:id="@+id/user_phoneNum_text"
+            style="@style/TextTheme"
+            android:layout_alignParentRight="true"
+            android:layout_margin="4dp"
+            android:text="18888888888" />
+
+        <TextView
+            android:id="@+id/things_phone_text"
+            style="@style/TextTheme"
+            android:layout_margin="4dp"
+            android:layout_toLeftOf="@id/user_phoneNum_text"
+            android:text="联系方式-" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/content_text"
         style="@style/TextTheme"
-        android:layout_below="@id/things_price_text"
+        android:layout_below="@id/things_msg_rl"
         android:layout_margin="4dp"
         android:text="十年之前，我不认识你 你不属于我，我们还是一样，陪在一个陌生人左右，走过渐渐熟悉的街头;十年之后，我们是朋友， 还可以问候，只是那种温柔，再也找不到拥抱的理由，情人最后难免沦为朋友。" />
 
-    <ImageView
-        android:id="@+id/item_action_fav"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/things_action_rl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/content_text"
-        android:layout_marginBottom="4dip"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="8dip"
-        android:layout_marginTop="4dip"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_action_fav_normal" />
+        android:layout_below="@id/content_text" >
 
-    <TextView
-        android:id="@+id/item_action_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/content_text"
-        android:layout_marginBottom="4dip"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="8dip"
-        android:layout_marginTop="4dip"
-        android:layout_toRightOf="@id/item_action_fav"
-        android:drawableLeft="@drawable/ic_action_comment"
-        android:gravity="center"
-        android:text="评论"
-        android:textColor="#888888" />
+        <ImageView
+            android:id="@+id/item_action_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="4dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_fav_normal" />
 
-    <TextView
-        android:id="@+id/item_action_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/content_text"
-        android:layout_marginBottom="4dip"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="8dip"
-        android:layout_marginTop="4dip"
-        android:drawableLeft="@drawable/ic_action_share"
-        android:gravity="center"
-        android:text="分享"
-        android:textColor="#888888" />
+        <TextView
+            android:id="@+id/item_action_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dip"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="4dip"
+            android:layout_toRightOf="@id/item_action_fav"
+            android:drawableLeft="@drawable/ic_action_comment"
+            android:gravity="center"
+            android:text="评论"
+            android:textColor="#888888" />
+
+        <TextView
+            android:id="@+id/item_action_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="4dip"
+            android:drawableLeft="@drawable/ic_action_share"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="#888888" />
+    </RelativeLayout>
 
 </RelativeLayout>

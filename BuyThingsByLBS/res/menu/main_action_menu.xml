@@ -21,6 +21,12 @@
         android:icon="@drawable/ofm_setting_icon"
         android:title="@string/action_settings"/>
     <item
+        android:id="@+id/action_login"
+        android:title="@string/action_login"/>
+    <item
+        android:id="@+id/action_login_out"
+        android:title="@string/action_loginOut"/>
+    <item
         android:id="@+id/action_about"
         android:icon="@drawable/actionbar_item_about"
         android:title="@string/action_ablout"/>

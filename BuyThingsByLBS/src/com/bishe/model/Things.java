@@ -14,7 +14,7 @@ public class Things extends BmobObject {
 	private int share;
 	private int comment;
 	private boolean isPass;
-	private boolean myFav;// 收藏
+	private boolean myFav;
 	private int price;
 	private BmobRelation relation;
 

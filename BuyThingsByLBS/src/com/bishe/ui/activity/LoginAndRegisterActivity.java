@@ -158,9 +158,7 @@ public class LoginAndRegisterActivity extends BasePageActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			finish();
-			
 		}
-		
 		return super.onMenuItemSelected(featureId, item);
 	}
 	
