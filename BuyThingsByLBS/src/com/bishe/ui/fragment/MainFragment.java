@@ -27,6 +27,9 @@ import com.bishe.MyApplication;
 import com.bishe.adapter.ThingsContentAdapter;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
+import com.bishe.logic.ThingsLogic;
+import com.bishe.logic.ThingsLogic.OnGetAllThingsListener;
+import com.bishe.logic.ThingsLogic.OnGetMyFavoutiteListener;
 import com.bishe.logic.UserLogic;
 import com.bishe.model.Things;
 import com.bishe.model.User;
@@ -46,7 +49,7 @@ import com.bishe.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
  * @date 2015-4-26
  * Copyright 2015 The robin . All rights reserved
  */
-public class MainFragment extends BaseHomeFragment {
+public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteListener,OnGetAllThingsListener{
 
 	private int currentIndex ;
 	private int pageNum;
@@ -57,7 +60,7 @@ public class MainFragment extends BaseHomeFragment {
 	private ThingsContentAdapter mAdapter;
 	private ListView actualListView;
 	private UserLogic mUserLogic;
-	
+	private ThingsLogic mThingsLogic;
 	
 	private TextView networkTips;
 	private ProgressBar progressbar;
@@ -128,7 +131,6 @@ public class MainFragment extends BaseHomeFragment {
 
 			@Override
 			public void onLastItemVisible() {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -158,54 +160,9 @@ public class MainFragment extends BaseHomeFragment {
 	
 	public void fetchData(){
 		setState(LOADING);
-		BmobQuery<Things> query = new BmobQuery<Things>();
-		query.order("-createdAt");
-		query.setCachePolicy(CachePolicy.NETWORK_ONLY);
-		query.setLimit(Constant.NUMBERS_PER_PAGE);
-		BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
-		query.addWhereLessThan("createdAt", date);
 		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
-		query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum++));
+		mThingsLogic.getAllThings(pageNum++);
 		LogUtils.i(TAG,"SIZE:"+Constant.NUMBERS_PER_PAGE*pageNum);
-		query.include("author");
-		query.findObjects(getActivity(), new FindListener<Things>() {
-			
-			@Override
-			public void onSuccess(List<Things> list) {
-				
-				LogUtils.i(TAG,"find success."+list.size());
-				if(list.size()!=0&&list.get(list.size()-1)!=null){
-					if(mRefreshType==RefreshType.REFRESH){
-						mListItems.clear();
-					}
-					if(list.size()<Constant.NUMBERS_PER_PAGE){
-						LogUtils.i(TAG,"已加载完所有数据~");
-					}
-					if(mUserLogic.getCurrentUser()!=null){
-						isCollect(mMyCollectThings, list);
-					}
-					mListItems.addAll(list);
-					mAdapter.notifyDataSetChanged();
-					
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}else{
-					ActivityUtils.toastShowBottom(getActivity(), "暂无更多数据~");
-					pageNum--;
-					setState(LOADING_COMPLETED);
-					mPullRefreshListView.onRefreshComplete();
-				}
-			}
-
-			@Override
-			public void onError(int arg0, String arg1) {
-				// TODO Auto-generated method stub
-				LogUtils.i(TAG,"find failed."+arg1);
-				pageNum--;
-				setState(LOADING_FAILED);
-				mPullRefreshListView.onRefreshComplete();
-			}
-		});
 	}
 	
 	public void setState(int state){
@@ -259,39 +216,8 @@ public class MainFragment extends BaseHomeFragment {
 	}
 	
 	private void getMyFavourite(){
-		User user = BmobUser.getCurrentUser(mContext, User.class);
-		if(user!=null){
-			BmobQuery<Things> query = new BmobQuery<Things>();
-			query.addWhereRelatedTo("favorite", new BmobPointer(user));
-			query.include("user");
-			query.order("createdAt");
-			query.setLimit(Constant.NUMBERS_PER_PAGE);
-			query.findObjects(mContext, new FindListener<Things>() {
-				
-				@Override
-				public void onSuccess(List<Things> data) {
-					// TODO Auto-generated method stub
-					LogUtils.i(TAG,"get fav success!"+data.size());
-					if (null != data) {
-						mMyCollectThings = data;
-					}
-					fetchData();
-				}
-
-				@Override
-				public void onError(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏失败。请检查网络~");
-					fetchData();
-				}
-			});
-		}else{
-			//前往登录注册界面
-			ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏前请先登录。");
-			Intent intent = new Intent();
-			intent.setClass(mContext, LoginAndRegisterActivity.class);
-			MyApplication.getInstance().getTopActivity().startActivityForResult(intent,Constant.GET_FAVOURITE);
-		}
+		mThingsLogic.setOnGetMyFavoutiteListener(this);
+		mThingsLogic.getMyFavouriteThings();
 	}
 	
 	@Override
@@ -311,6 +237,57 @@ public class MainFragment extends BaseHomeFragment {
 	@Override
 	protected void initData() {
 		mUserLogic = new UserLogic(mContext);
+		mThingsLogic = new ThingsLogic(mContext);
+	}
+
+	@Override
+	public void onGetMyFavSuccess(List<Things> data) {
+		LogUtils.i(TAG,"get fav success!"+data.size());
+		if (null != data) {
+			mMyCollectThings = data;
+		}
+		fetchData();
+		
+	}
+
+	@Override
+	public void onGetMyFavFailure(String msg) {
+		ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏失败。请检查网络~");
+		fetchData();
+	}
+
+	@Override
+	public void onGetAllThingsSuccess(List<Things> data) {
+		LogUtils.i(TAG,"find success."+data.size());
+		if(data.size()!=0&&data.get(data.size()-1)!=null){
+			if(mRefreshType==RefreshType.REFRESH){
+				mListItems.clear();
+			}
+			if(data.size()<Constant.NUMBERS_PER_PAGE){
+				LogUtils.i(TAG,"已加载完所有数据~");
+			}
+			if(mUserLogic.getCurrentUser()!=null){
+				isCollect(mMyCollectThings, data);
+			}
+			mListItems.addAll(data);
+			mAdapter.notifyDataSetChanged();
+			
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}else{
+			ActivityUtils.toastShowBottom(getActivity(), "暂无更多数据~");
+			pageNum--;
+			setState(LOADING_COMPLETED);
+			mPullRefreshListView.onRefreshComplete();
+		}
+	}
+
+	@Override
+	public void onGetAllThingsFailure(String msg) {
+		LogUtils.i(TAG,"find failed."+msg);
+		pageNum--;
+		setState(LOADING_FAILED);
+		mPullRefreshListView.onRefreshComplete();
 	}
 
 }
