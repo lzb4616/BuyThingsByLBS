@@ -216,7 +216,7 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 	}
 	
 	private void getMyFavourite(){
-		mThingsLogic.setOnGetMyFavoutiteListener(this);
+
 		mThingsLogic.getMyFavouriteThings();
 	}
 	
@@ -238,6 +238,8 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 	protected void initData() {
 		mUserLogic = new UserLogic(mContext);
 		mThingsLogic = new ThingsLogic(mContext);
+		mThingsLogic.setOnGetMyFavoutiteListener(this);
+		mThingsLogic.setOnGetAllThingsListener(this);
 	}
 
 	@Override

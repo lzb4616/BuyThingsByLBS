@@ -40,6 +40,7 @@ public class ThingsLogic {
 
 	public ThingsLogic(Context context) {
 		this.mContext = context;
+		this.mUserLogic = new UserLogic(context);
 	}
 
 	/**

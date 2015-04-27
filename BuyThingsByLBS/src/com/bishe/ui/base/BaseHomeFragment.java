@@ -27,10 +27,10 @@ public abstract class BaseHomeFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View contentView = inflater.inflate(getLayoutId(),container,false);
+		initData();
 		findViews(contentView);
 		setupViews(savedInstanceState);
 		initListeners();
-		initData();
 		return contentView;
 	}
 	
