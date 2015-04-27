@@ -39,6 +39,7 @@ import com.bishe.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListen
 import com.bishe.pulltorefresh.library.PullToRefreshBase.State;
 import com.bishe.pulltorefresh.library.PullToRefreshListView;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
+import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
@@ -148,12 +149,10 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
-//				MyApplication.getInstance().setCurrentQiangYu(mListItems.get(position-1));
-//				Intent intent = new Intent();
-//				intent.setClass(getActivity(), CommentActivity.class);
-//				intent.putExtra("data", mListItems.get(position-1));
-//				startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(getActivity(), ThingsDetailActivity.class);
+				intent.putExtra("data", mListItems.get(position-1));
+				startActivity(intent);
 			}
 		});
 	}

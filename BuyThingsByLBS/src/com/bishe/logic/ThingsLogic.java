@@ -9,6 +9,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -16,10 +17,10 @@ import cn.bmob.v3.listener.UpdateListener;
 
 import com.bishe.MyApplication;
 import com.bishe.config.Constant;
+import com.bishe.model.Comment;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
-import com.bishe.ui.fragment.MainFragment.RefreshType;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
 
@@ -275,6 +276,50 @@ public class ThingsLogic {
 					return;
 				}
 				mGetAllThingsListener.onGetAllThingsFailure(arg1);
+			}
+		});
+	}
+	
+	public interface OnThingsRelatedCommnetListener
+	{
+		void onRelatedCommentSuccess();
+		void onRelatedCommnetFailure(String msg);
+	}
+	
+	private OnThingsRelatedCommnetListener mOnRelatedCommnetListener;
+	
+	public void setOnThingsRelatedCommnetListener(OnThingsRelatedCommnetListener commnetListener)
+	{
+		this.mOnRelatedCommnetListener = commnetListener;
+	}
+	
+	
+	public void publishCommetWithThings(Things things,Comment comment)
+	{
+		BmobRelation relation = new BmobRelation();
+		relation.add(comment);
+		things.setRelation(relation);
+		things.setComment(things.getComment()+1);
+		things.setMyFav(false);
+		things.update(mContext, new UpdateListener() {
+			@Override
+			public void onSuccess() {
+				if (null == mOnRelatedCommnetListener) {
+					LogUtils.i(TAG,
+							"mOnRelatedCommnetListener is null,you must set one!");
+					return;
+				}
+				mOnRelatedCommnetListener.onRelatedCommentSuccess();
+			}
+
+			@Override
+			public void onFailure(int arg0, String arg1) {
+				if (null == mOnRelatedCommnetListener) {
+					LogUtils.i(TAG,
+							"mOnRelatedCommnetListener is null,you must set one!");
+					return;
+				}
+				mOnRelatedCommnetListener.onRelatedCommnetFailure(arg1);
 			}
 		});
 	}

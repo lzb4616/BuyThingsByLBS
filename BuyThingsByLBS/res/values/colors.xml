@@ -10,7 +10,9 @@
     <color name="white">#FFFFFF</color>
     <color name="lightred">#90FF0000</color>
     <color name="actionbar_background_color">#303537</color>
-    
+    <color name="theme_color">#D95555</color>
+    <color name="second_color">#888888</color>
+
     <integer-array name="gplus_colors">
         <item>@color/gplus_color_1</item>
         <item>@color/gplus_color_2</item>

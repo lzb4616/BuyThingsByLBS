@@ -25,9 +25,11 @@ import com.bishe.MyApplication;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
 import com.bishe.logic.UserLogic;
+import com.bishe.logic.UserLogic.OnCollectMyFavouriteListener;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
+import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.BitmapUtils;
 import com.bishe.utils.LogUtils;
@@ -38,15 +40,18 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
  * @author robin
  * @date 2015-4-26 Copyright 2015 The robin . All rights reserved
  */
-public class ThingsContentAdapter extends BaseContentAdapter<Things> {
+public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
+		OnCollectMyFavouriteListener {
 
 	public static final String TAG = "ThingsContentAdapter";
 	public static final int SAVE_FAVOURITE = 2;
 	private UserLogic mUserLogic;
+	private Boolean mIsCollect;
 
 	public ThingsContentAdapter(Context context, List<Things> list) {
 		super(context, list);
 		this.mUserLogic = new UserLogic(context);
+		this.mUserLogic.setOnCollectMyFavouriteListener(this);
 	}
 
 	@Override
@@ -101,7 +106,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 		viewHolder.thingsLocation.setText("广州");
 		viewHolder.thingsPhone.setText("18642153461");
 		viewHolder.thingsPrice.setText(String.valueOf(entity.getPrice()));
-
+		viewHolder.comment.setText("评论:"+entity.getComment());
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl(mContext);
@@ -159,7 +164,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 						public void onLoadingComplete(String imageUri,
 								View view, Bitmap loadedImage) {
 							super.onLoadingComplete(imageUri, view, loadedImage);
-							LogUtils.i(TAG, "加载图片"+imageUri+"成功");
+							LogUtils.i(TAG, "加载图片" + imageUri + "成功");
 						}
 
 					});
@@ -182,8 +187,6 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 
 			@Override
 			public void onClick(View v) {
-				// 评论
-				// MyApplication.getInstance().setCurrentQiangYu(entity);
 				if (mUserLogic.getCurrentUser() == null) {
 					ActivityUtils.toastShowBottom((Activity) mContext, "请先登录。");
 					Intent intent = new Intent();
@@ -192,13 +195,11 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 							.startActivity(intent);
 					return;
 				}
-				LogUtils.i(TAG, "到时这个是详情界面");
-				// TODO Auto-generated method stub
-				// Intent intent = new Intent();
-				// intent.setClass(MyApplication.getInstance().getTopActivity(),
-				// CommentActivity.class);
-				// intent.putExtra("data", entity);
-				// mContext.startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(MyApplication.getInstance().getTopActivity(),
+						ThingsDetailActivity.class);
+				intent.putExtra("data", entity);
+				mContext.startActivity(intent);
 			}
 		});
 
@@ -216,120 +217,55 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 				// 收藏
 				ActivityUtils.toastShowBottom((Activity) mContext, "收藏");
 				onClickFav(v, entity);
-
 			}
 		});
 		return convertView;
 	}
 
 	private void onClickFav(View v, final Things things) {
-		
-		User user = mUserLogic.getCurrentUser();
-		
-		if (user != null && user.getSessionToken() != null) {
-			
-			BmobRelation favRelaton = new BmobRelation();
-			
-			things.setMyFav(!things.isMyFav());
-			things.setPass(false);
-			if (things.isMyFav()) {
-				((ImageView) v)
-						.setImageResource(R.drawable.ic_action_fav_choose);
-				favRelaton.add(things);
-				user.setFavorite(favRelaton);
-				user.update(mContext, new UpdateListener() {
-					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						/**
-						 * 这个到时需要数据库
-						 * */
-						// DatabaseUtil.getInstance(mContext).insertFav(qiangYu);
-						ActivityUtils.toastShowBottom((Activity) mContext, "收藏成功。");
-						LogUtils.i(TAG, "收藏成功。");
-						// try get fav to see if fav success
-						getMyFavourite();
-					}
 
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						LogUtils.i(TAG, "收藏失败。请检查网络~");
-						ActivityUtils.toastShowBottom((Activity) mContext,
-								"收藏失败。请检查网络~" + arg0);
-					}
-				});
-
-			} else {
-				((ImageView) v)
-						.setImageResource(R.drawable.ic_action_fav_normal);
-				favRelaton.remove(things);
-				user.setFavorite(favRelaton);
-				ActivityUtils.toastShowBottom((Activity) mContext, "取消收藏。");
-				user.update(mContext, new UpdateListener() {
-
-					@Override
-					public void onSuccess() {
-						// TODO Auto-generated method stub
-						/**
-						 * 这个到时需要数据库
-						 * */
-						// DatabaseUtil.getInstance(mContext).deleteFav(qiangYu);
-						LogUtils.i(TAG, "取消收藏。");
-						// try get fav to see if fav success
-						getMyFavourite();
-					}
-
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						LogUtils.i(TAG, "取消收藏失败。请检查网络~");
-						ActivityUtils.toastShowBottom((Activity) mContext,
-								"取消收藏失败。请检查网络~" + arg0);
-					}
-				});
-			}
-
+		mIsCollect = !things.isMyFav();
+		if (mIsCollect) {
+			((ImageView) v).setImageResource(R.drawable.ic_action_fav_choose);
 		} else {
-			// 前往登录注册界面
-			ActivityUtils.toastShowBottom((Activity) mContext, "收藏前请先登录。");
-			Intent intent = new Intent();
-			intent.setClass(mContext, LoginAndRegisterActivity.class);
-			MyApplication.getInstance().getTopActivity()
-					.startActivityForResult(intent, SAVE_FAVOURITE);
+			((ImageView) v).setImageResource(R.drawable.ic_action_fav_normal);
 		}
+		mUserLogic.collectMyFav(things, mIsCollect);
 	}
 
-	private void getMyFavourite(){
+	private void getMyFavourite() {
 		User user = BmobUser.getCurrentUser(mContext, User.class);
-		if(user!=null){
+		if (user != null) {
 			BmobQuery<Things> query = new BmobQuery<Things>();
 			query.addWhereRelatedTo("favorite", new BmobPointer(user));
 			query.include("user");
 			query.order("createdAt");
-//			query.setLimit(Constant.NUMBERS_PER_PAGE);
+			// query.setLimit(Constant.NUMBERS_PER_PAGE);
 			query.findObjects(mContext, new FindListener<Things>() {
-				
+
 				@Override
 				public void onSuccess(List<Things> data) {
-					// TODO Auto-generated method stub
-					LogUtils.i(TAG,"get fav success!"+data.size());
-					ActivityUtils.toastShowBottom((Activity) mContext, "fav size:"+data.size());
+					LogUtils.i(TAG, "get fav success!" + data.size());
+					ActivityUtils.toastShowBottom((Activity) mContext,
+							"fav size:" + data.size());
 				}
 
 				@Override
 				public void onError(int arg0, String arg1) {
-					// TODO Auto-generated method stub
-					ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏失败。请检查网络~");
+					ActivityUtils.toastShowBottom((Activity) mContext,
+							"获取收藏失败。请检查网络~");
 				}
 			});
-		}else{
-			//前往登录注册界面
+		} else {
+			// 前往登录注册界面
 			ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏前请先登录。");
 			Intent intent = new Intent();
 			intent.setClass(mContext, LoginAndRegisterActivity.class);
-			MyApplication.getInstance().getTopActivity().startActivityForResult(intent,Constant.GET_FAVOURITE);
+			MyApplication.getInstance().getTopActivity()
+					.startActivityForResult(intent, Constant.GET_FAVOURITE);
 		}
 	}
-	
+
 	public static class ViewHolder {
 		public ImageView userLogo;
 		public TextView userName;
@@ -342,6 +278,37 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> {
 		public ImageView favMark;
 		public TextView share;
 		public TextView comment;
+	}
+
+	@Override
+	public void onCollectSuccess() {
+		if (mIsCollect) {
+			// TODO Auto-generated method stub
+			/**
+			 * 这个到时需要数据库
+			 * */
+			// DatabaseUtil.getInstance(mContext).insertFav(qiangYu);
+			ActivityUtils.toastShowBottom((Activity) mContext, "收藏成功。");
+			LogUtils.i(TAG, "收藏成功。");
+
+			// try get fav to see if fav success
+			getMyFavourite();
+		} else {
+			/**
+			 * 这个到时需要数据库
+			 * */
+			// DatabaseUtil.getInstance(mContext).deleteFav(qiangYu);
+			ActivityUtils.toastShowBottom((Activity) mContext, "取消收藏成功。");
+			LogUtils.i(TAG, "取消收藏。");
+			// try get fav to see if fav success
+			getMyFavourite();
+		}
+	}
+
+	@Override
+	public void onCollectFailure(String msg) {
+		LogUtils.i(TAG, "收藏失败。请检查网络~");
+		ActivityUtils.toastShowBottom((Activity) mContext, "收藏失败。请检查网络~" + msg);
 	}
 
 }

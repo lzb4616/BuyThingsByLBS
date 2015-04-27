@@ -11,5 +11,8 @@
     <string name="action_publish">发布</string>
     <string name="action_login">登录</string>
     <string name="action_loginOut">退出登录</string>
+    <string name="action_delete">删除</string>
+    <string name="action_update">编辑</string>
+    <string name="action_mythings">我的东西</string>
 </resources>
                                          
