@@ -3,16 +3,17 @@ package com.bishe.ui.activity;
 import android.view.MenuItem;
 
 import com.bishe.buythingsbylbs.R;
+import com.bishe.model.Things;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.fragment.ThingsDetailFragment;
 
 /**
  * @author robin
- * @date 2015-4-27
- * Copyright 2015 The robin . All rights reserved
+ * @date 2015-4-27 Copyright 2015 The robin . All rights reserved
  */
 public class ThingsDetailActivity extends BaseHomeActivity {
+
 
 	@Override
 	protected BaseFragment getFragment() {
@@ -30,10 +31,32 @@ public class ThingsDetailActivity extends BaseHomeActivity {
 		case android.R.id.home:
 			finish();
 			break;
-			
+		case R.id.action_buy:
+			mDetailListener.buyThings();
+			break;
+		case R.id.action_delete:
+			mDetailListener.deleThings();
+			break;
+		case R.id.action_update:
+			mDetailListener.updateThings();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private OnThingsDetailListener mDetailListener;
+
+	public void setOnThingsDetailListener(OnThingsDetailListener detailListener) {
+		this.mDetailListener = detailListener;
+	}
+
+	public interface OnThingsDetailListener {
+		void buyThings();
+
+		void deleThings();
+
+		void updateThings();
 	}
 
 	@Override

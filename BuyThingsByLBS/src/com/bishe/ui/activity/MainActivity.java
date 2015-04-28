@@ -8,6 +8,7 @@ import com.bishe.logic.UserLogic;
 import com.bishe.model.User;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
+import com.bishe.ui.fragment.BuyThingsFragment;
 import com.bishe.ui.fragment.LoginFragment;
 import com.bishe.ui.fragment.MainFragment;
 import com.bishe.ui.fragment.MyFavouriteFragment;
@@ -25,11 +26,11 @@ public class MainActivity extends BaseHomeActivity {
 	private UserLogic mUserLogic;
 	private MainFragment mMainFragment;
 	private MyFavouriteFragment mFavouriteFragment;
-	
+	private BuyThingsFragment mBuyThingsFragment;
 	private SelectFragmentType mSelectFragment;
 
 	private enum SelectFragmentType {
-		MAINFRAGMENT,FAVOURITEFRAGMENT
+		MAINFRAGMENT,FAVOURITEFRAGMENT,BUYTHINGSFRAGMENT
 	}
 
 	@Override
@@ -41,6 +42,9 @@ public class MainActivity extends BaseHomeActivity {
 		case FAVOURITEFRAGMENT:
 			setActionBar("我的收藏", null, true);
 			return mFavouriteFragment;
+		case BUYTHINGSFRAGMENT:
+			setActionBar("我购买的东西", null, true);
+			return mBuyThingsFragment;
 		default:
 			return mMainFragment;
 		}
@@ -60,7 +64,8 @@ public class MainActivity extends BaseHomeActivity {
 		case R.id.action_collection:
 			mSelectFragment = SelectFragmentType.FAVOURITEFRAGMENT;
 			break;
-		case R.id.action_about:
+		case R.id.action_hadBuy:
+			mSelectFragment = SelectFragmentType.BUYTHINGSFRAGMENT;
 			break;
 		case R.id.action_main:
 			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
@@ -103,6 +108,7 @@ public class MainActivity extends BaseHomeActivity {
 		mUserLogic = new UserLogic(mContext);
 		mMainFragment = new MainFragment();
 		mFavouriteFragment = new MyFavouriteFragment();
+		mBuyThingsFragment = new BuyThingsFragment();
 		mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 	}
 

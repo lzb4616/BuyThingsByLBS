@@ -252,7 +252,7 @@ public class UserLogic {
 					@Override
 					public void onSuccess() {
 						if (null == mCollectMyFavouriteListener) {
-							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");		
 							return;
 						}
 						mCollectMyFavouriteListener.onCollectSuccess();
@@ -260,7 +260,7 @@ public class UserLogic {
 					@Override
 					public void onFailure(int arg0, String arg1) {
 						if (null == mCollectMyFavouriteListener) {
-							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");	
 							return;
 						}
 						mCollectMyFavouriteListener.onCollectFailure(arg1);
@@ -275,7 +275,7 @@ public class UserLogic {
 					@Override
 					public void onSuccess() {
 						if (null == mCollectMyFavouriteListener) {
-							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");			
 							return;
 						}
 						mCollectMyFavouriteListener.onCollectSuccess();
@@ -284,7 +284,7 @@ public class UserLogic {
 					@Override
 					public void onFailure(int arg0, String arg1) {
 						if (null == mCollectMyFavouriteListener) {
-							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mCollectMyFavouriteListener is null,you must set one!");		
 							return;
 						}
 						mCollectMyFavouriteListener.onCollectFailure(arg1);
@@ -301,90 +301,7 @@ public class UserLogic {
 					.startActivityForResult(intent, ThingsContentAdapter.SAVE_FAVOURITE);
 		} 
 	}
-	
-	
-	public interface OnPublishMyThingsListener {
-		void onPublishMyThingsSuccess();
 
-		void onPublishMythingsFailure(String msg);
-
-	}
-
-	private OnPublishMyThingsListener mOnPublishMyThingsListener;
-
-	public void setOnPublishMyThingsListener(
-			OnPublishMyThingsListener myThingsListener) {
-		this.mOnPublishMyThingsListener = myThingsListener;
-
-	}
-
-	/**
-	 * 发布我的东西，进行跟用户关联
-	 * 
-	 * @param things != nil
-	 * @param isPublishOrDelete = ture发布。 = false 删除
-	 * */
-	public void publishMyThings(Things things,Boolean isPublishOrDelete) {
-		User user = getCurrentUser();
-		if (user != null && user.getSessionToken() != null) {
-			BmobRelation publishRelaton = new BmobRelation();
-			if (isPublishOrDelete) {
-				publishRelaton.add(things);
-				user.setPublish(publishRelaton);
-				user.update(mContext, new UpdateListener() {
-					@Override
-					public void onSuccess() {
-						if (null == mOnPublishMyThingsListener) {
-							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
-							return;
-						}
-						mOnPublishMyThingsListener.onPublishMyThingsSuccess();
-					}
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						if (null == mOnPublishMyThingsListener) {
-							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
-							return;
-						}
-						mOnPublishMyThingsListener.onPublishMythingsFailure(arg1);
-					}
-				});
-
-			} else {
-				publishRelaton.remove(things);
-				user.setPublish(publishRelaton);
-				user.update(mContext, new UpdateListener() {
-
-					@Override
-					public void onSuccess() {
-						if (null == mOnPublishMyThingsListener) {
-							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
-							return;
-						}
-						mOnPublishMyThingsListener.onPublishMyThingsSuccess();
-					}
-
-					@Override
-					public void onFailure(int arg0, String arg1) {
-						if (null == mOnPublishMyThingsListener) {
-							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
-							return;
-						}
-						mOnPublishMyThingsListener.onPublishMythingsFailure(arg1);
-					}
-				});
-			}
-
-		} else {
-			// 前往登录注册界面
-			ActivityUtils.toastShowBottom((Activity) mContext, "收藏前请先登录。");
-			Intent intent = new Intent();
-			intent.setClass(mContext, LoginAndRegisterActivity.class);
-			MyApplication.getInstance().getTopActivity()
-					.startActivity(intent);
-		} 
-	}
-	
 	
 	public interface OnBuyThingsListener {
 		void onBuyThingsSuccess();
@@ -418,7 +335,7 @@ public class UserLogic {
 					@Override
 					public void onSuccess() {
 						if (null == mOnBuyThingsListener) {
-							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");
 							return;
 						}
 						mOnBuyThingsListener.onBuyThingsSuccess();
@@ -426,7 +343,7 @@ public class UserLogic {
 					@Override
 					public void onFailure(int arg0, String arg1) {
 						if (null == mOnBuyThingsListener) {
-							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");
 							return;
 						}
 						mOnBuyThingsListener.onBuyThingsFailure(arg1);
@@ -435,13 +352,13 @@ public class UserLogic {
 
 			} else {
 				buyRelaton.remove(things);
-				user.setPublish(buyRelaton);
+				user.setBuyThing(buyRelaton);
 				user.update(mContext, new UpdateListener() {
 
 					@Override
 					public void onSuccess() {
 						if (null == mOnBuyThingsListener) {
-							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");	
 							return;
 						}
 						mOnBuyThingsListener.onBuyThingsSuccess();
@@ -450,7 +367,7 @@ public class UserLogic {
 					@Override
 					public void onFailure(int arg0, String arg1) {
 						if (null == mOnBuyThingsListener) {
-							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");
 							return;
 						}
 						mOnBuyThingsListener.onBuyThingsFailure(arg1);

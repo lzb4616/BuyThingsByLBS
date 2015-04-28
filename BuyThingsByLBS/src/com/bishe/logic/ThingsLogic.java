@@ -107,7 +107,6 @@ public class ThingsLogic {
 
 	public void updateThings(Things things) {
 		things.update(mContext, new UpdateListener() {
-
 			@Override
 			public void onSuccess() {
 				if (null == mIsUpdateListener) {
@@ -403,7 +402,7 @@ public class ThingsLogic {
 		this.mBuyThingsListener = buyThingsListener;
 	}
 
-	public void getMyHadBuyThings() {
+	public void getMyHadBuyThings(int pageNum) {
 		User user = mUserLogic.getCurrentUser();
 		if (user != null) {
 			BmobQuery<Things> query = new BmobQuery<Things>();
@@ -411,6 +410,7 @@ public class ThingsLogic {
 			query.include("user");
 			query.order("createdAt");
 			query.setLimit(Constant.NUMBERS_PER_PAGE);
+			query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum));
 			query.findObjects(mContext, new FindListener<Things>() {
 
 				@Override

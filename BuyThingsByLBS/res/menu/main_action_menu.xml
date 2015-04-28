@@ -16,24 +16,22 @@
         android:id="@+id/action_collection"
         android:icon="@drawable/ofm_collect_icon"
         android:title="@string/action_collection"/>
+    <item 
+        android:id="@+id/action_hadBuy"
+        android:title="@string/action_hadbuy" 
+        />
     <item
+        android:id="@+id/action_my_info"
+        android:icon="@drawable/navigationbar_me_2x"
+        android:title="@string/action_my_info"/>
+     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ofm_setting_icon"
         android:title="@string/action_settings"/>
-    <item
+         <item
         android:id="@+id/action_login"
         android:title="@string/action_login"/>
     <item
         android:id="@+id/action_login_out"
         android:title="@string/action_loginOut"/>
-    
-    <item
-        android:id="@+id/action_my_info"
-        android:icon="@drawable/navigationbar_me_2x"
-        android:title="@string/action_my_info"/>
-    <item
-        android:id="@+id/action_about"
-        android:icon="@drawable/actionbar_item_about"
-        android:title="@string/action_ablout"/>
-
 </menu>

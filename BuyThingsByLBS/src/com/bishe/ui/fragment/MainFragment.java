@@ -251,13 +251,14 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 
 	@Override
 	public void onGetMyFavFailure(String msg) {
-		ActivityUtils.toastShowBottom((Activity) mContext, "获取收藏失败。请检查网络~");
+		ActivityUtils.toastShowBottom((Activity) mContext, "获取数据失败，请检查网络~");
 		fetchData();
 	}
 
 	@Override
 	public void onGetAllThingsSuccess(List<Things> data) {
 		LogUtils.i(TAG,"find success."+data.size());
+	
 		if(data.size()!=0&&data.get(data.size()-1)!=null){
 			if(mRefreshType==RefreshType.REFRESH){
 				mListItems.clear();
@@ -274,6 +275,10 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 			setState(LOADING_COMPLETED);
 			mPullRefreshListView.onRefreshComplete();
 		}else{
+			if(mRefreshType==RefreshType.REFRESH){
+				mListItems.clear();
+				mAdapter.notifyDataSetChanged();
+			}
 			ActivityUtils.toastShowBottom(getActivity(), "暂无更多数据~");
 			pageNum--;
 			setState(LOADING_COMPLETED);

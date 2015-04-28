@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -87,6 +88,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 					.findViewById(R.id.item_action_share);
 			viewHolder.comment = (TextView) convertView
 					.findViewById(R.id.item_action_comment);
+			viewHolder.buytagView = (ImageView) convertView.findViewById(R.id.content_buy_tag);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -109,6 +111,9 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		viewHolder.thingsPhone.setText("" + entity.getAuthor().getPhoneNum());
 		viewHolder.thingsPrice.setText(String.valueOf(entity.getPrice()));
 		viewHolder.comment.setText("评论:" + entity.getComment());
+		viewHolder.buytagView.setImageBitmap(((BitmapDrawable)mContext.getResources().getDrawable(R.drawable.icon_tag_2x)).getBitmap());
+		viewHolder.buytagView.setVisibility(entity.isBuy()?View.VISIBLE:View.GONE);
+		
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl(mContext);
@@ -277,6 +282,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		public ImageView favMark;
 		public TextView share;
 		public TextView comment;
+		public ImageView buytagView; 
 	}
 
 	@Override

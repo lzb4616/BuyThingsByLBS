@@ -7,8 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.AudioRecord;
-import android.media.AudioRecord.OnRecordPositionUpdateListener;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,16 +31,21 @@ import com.bishe.config.Constant;
 import com.bishe.logic.CommentLogic;
 import com.bishe.logic.CommentLogic.OnPublishCommnetListener;
 import com.bishe.logic.ThingsLogic;
+import com.bishe.logic.ThingsLogic.IsDeleteListener;
+import com.bishe.logic.ThingsLogic.IsUpdateListener;
 import com.bishe.logic.ThingsLogic.OnThingsRelatedCommnetListener;
 import com.bishe.logic.UserLogic;
 import com.bishe.logic.CommentLogic.OnFetchCommnetListener;
+import com.bishe.logic.UserLogic.OnBuyThingsListener;
 import com.bishe.logic.UserLogic.OnCollectMyFavouriteListener;
 import com.bishe.model.Comment;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
 import com.bishe.ui.activity.PersonalThingsActivity;
+import com.bishe.ui.activity.PublishThingsActivity;
 import com.bishe.ui.activity.ThingsDetailActivity;
+import com.bishe.ui.activity.ThingsDetailActivity.OnThingsDetailListener;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
@@ -56,7 +60,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 public class ThingsDetailFragment extends BaseHomeFragment implements
 		OnItemClickListener, OnCollectMyFavouriteListener,
 		OnFetchCommnetListener, OnPublishCommnetListener,
-		OnThingsRelatedCommnetListener {
+		OnThingsRelatedCommnetListener, OnThingsDetailListener,OnBuyThingsListener,IsUpdateListener,IsDeleteListener{
 
 	private ImageView mUserLogo;
 	private TextView mUserName;
@@ -71,6 +75,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	private TextView mComment;
 	private EditText mCommentContent;
 	private Button mCommentCommit;
+	private ImageView mBuytagView;
 
 	private ListView mCommentList;
 	private TextView mFooter;
@@ -116,6 +121,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mFooter = (TextView) view.findViewById(R.id.loadmore);
 		mCommentContent = (EditText) view.findViewById(R.id.comment_content);
 		mCommentCommit = (Button) view.findViewById(R.id.comment_commit);
+		mBuytagView = (ImageView) view.findViewById(R.id.content_buy_tag);
 	}
 
 	@Override
@@ -153,9 +159,11 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mContentText.setText(entity.getContent());
 		mThingsDistance.setText("200米");
 		mThingsLocation.setText("广州");
-		mThingsPhone.setText(""+entity.getAuthor().getPhoneNum());
+		mThingsPhone.setText("" + entity.getAuthor().getPhoneNum());
 		mThingsPrice.setText(String.valueOf(entity.getPrice()));
-		mComment.setText("评论："+entity.getComment());
+		mComment.setText("评论：" + entity.getComment());
+		mBuytagView.setImageBitmap(((BitmapDrawable)mContext.getResources().getDrawable(R.drawable.icon_tag_2x)).getBitmap());
+		mBuytagView.setVisibility(entity.isBuy()?View.VISIBLE:View.GONE);
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl(mContext);
@@ -205,12 +213,12 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 					MyApplication.getInstance().getOptions(
 							R.drawable.bg_pic_loading),
 					new SimpleImageLoadingListener() {
-
 						@Override
 						public void onLoadingComplete(String imageUri,
 								View view, Bitmap loadedImage) {
 							super.onLoadingComplete(imageUri, view, loadedImage);
 							LogUtils.i(TAG, "加载图片" + imageUri + "成功");
+							
 						}
 
 					});
@@ -307,6 +315,10 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mCommentLogic.setOnFetchCommnetListener(this);
 		mCommentLogic.setOnPublishCommnetListener(this);
 		mThingsLogic.setOnThingsRelatedCommnetListener(this);
+		((ThingsDetailActivity) mContext).setOnThingsDetailListener(this);
+		mThingsLogic.setOnIsDeleteListener(this);
+		mUserLogic.setOnBuyThingsListener(this);
+		mThingsLogic.setOnIsUpdateListener(this);
 	}
 
 	@Override
@@ -427,7 +439,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mCommentAdapter.notifyDataSetChanged();
 		setListViewHeightBasedOnChildren(mCommentList);
 		mCommentContent.setText("");
-		mComment.setText("评论："+mComments.size());
+		mComment.setText("评论：" + mComments.size());
 		hideSoftInput();
 		mThingsLogic.publishCommetWithThings(mThings, comment);
 	}
@@ -438,7 +450,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	}
 
 	private void onClickComment() {
-		mCommentContent.requestFocus(); 
+		mCommentContent.requestFocus();
 
 		InputMethodManager imm = (InputMethodManager) mContext
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -456,11 +468,69 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	@Override
 	public void onRelatedCommentSuccess() {
 		LogUtils.i(TAG, "更新评论成功。");
-		
+
 	}
 
 	@Override
 	public void onRelatedCommnetFailure(String msg) {
 		ActivityUtils.toastShowBottom(mContext, "关联评论失败。请检查网络~");
 	}
+
+	@Override
+	public void buyThings() {
+		if (mThings.isBuy()) {
+			ActivityUtils.toastShowCenter(mContext, "这个东西已经售出，如果需要请联系买家");
+			return;
+		}
+		mUserLogic.buyThings(mThings, true);
+	}
+
+	@Override
+	public void deleThings() {
+		mThingsLogic.deleteThings(mThings);
+	}
+
+	@Override
+	public void updateThings() {
+		Intent intent = new Intent();
+		intent.setClass(mContext, PublishThingsActivity.class);
+		intent.putExtra("data", mThings);
+		mContext.startActivity(intent);
+		mContext.finish();
+	}
+
+	@Override
+	public void onBuyThingsSuccess() {
+		mThings.setBuy(true);
+		mThingsLogic.updateThings(mThings);
+	}
+
+	@Override
+	public void onBuyThingsFailure(String msg) {
+		ActivityUtils.toastShowBottom(mContext, "购买失败"+msg);
+	}
+
+
+	@Override
+	public void onDeleteSuccess() {
+		ActivityUtils.toastShowBottom(mContext, "删除成功");
+		mContext.finish();
+	}
+
+	@Override
+	public void onDeleteFailure(String msg) {
+		ActivityUtils.toastShowBottom(mContext, "删除失败"+msg);
+	}
+
+	@Override
+	public void onUpdateSuccess() {
+		mBuytagView.setVisibility(mThings.isBuy()?View.VISIBLE:View.GONE);		
+		ActivityUtils.toastShowBottom(mContext, "购买成功");
+	}
+
+	@Override
+	public void onUpdateFailure(String msg) {
+		ActivityUtils.toastShowBottom(mContext, "购买失败"+msg);		
+	}
+
 }

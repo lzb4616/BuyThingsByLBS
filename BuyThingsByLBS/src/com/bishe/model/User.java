@@ -12,7 +12,6 @@ public class User extends BmobUser{
 	private String signature;
 	private BmobFile avatar;
 	private BmobRelation favorite;
-	private BmobRelation publish;
 	private BmobRelation buyThing;
 	private Location location;
 	private Long phoneNum;
@@ -54,12 +53,6 @@ public class User extends BmobUser{
 	}
 	public void setPhoneNum(Long phoneNum) {
 		this.phoneNum = phoneNum;
-	}
-	public BmobRelation getPublish() {
-		return publish;
-	}
-	public void setPublish(BmobRelation publish) {
-		this.publish = publish;
 	}
 	public BmobRelation getBuyThing() {
 		return buyThing;
