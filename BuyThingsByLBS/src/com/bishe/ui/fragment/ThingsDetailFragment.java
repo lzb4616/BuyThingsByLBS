@@ -564,11 +564,14 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		MenuItem item = menu.findItem(R.id.action_cancel_buy);
+		MenuItem cancelBuyItem = menu.findItem(R.id.action_cancel_buy);
+		MenuItem updateItem = menu.findItem(R.id.action_update);
 		if (isCurrentUser(mThings.getAuthor())) {
-			item.setVisible(true);
+			cancelBuyItem.setVisible(true);
+			updateItem.setVisible(true);
 		} else {
-			item.setVisible(false);
+			cancelBuyItem.setVisible(false);
+			updateItem.setVisible(false);
 		}
 	}
 	

@@ -25,6 +25,7 @@ public abstract class BasePageActivity extends BaseActivity{
 		setupViews(bundle);
 		setListener();
 		fetchData();
+	
 	}
 
 

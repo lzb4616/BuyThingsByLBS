@@ -39,7 +39,9 @@ import com.bishe.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListen
 import com.bishe.pulltorefresh.library.PullToRefreshBase.State;
 import com.bishe.pulltorefresh.library.PullToRefreshListView;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
+import com.bishe.ui.activity.MainActivity;
 import com.bishe.ui.activity.ThingsDetailActivity;
+import com.bishe.ui.activity.MainActivity.OnMainActivityListener;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
@@ -50,7 +52,7 @@ import com.bishe.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
  * @date 2015-4-26
  * Copyright 2015 The robin . All rights reserved
  */
-public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteListener,OnGetAllThingsListener{
+public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteListener,OnGetAllThingsListener,OnMainActivityListener{
 
 	private int pageNum;
 	private String lastItemTime;//当前列表结尾的条目的创建时间，
@@ -227,8 +229,7 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 
 	@Override
 	protected void initListeners() {
-		// TODO Auto-generated method stub
-
+		((MainActivity)mContext).setOnMainActivityListener(this);
 	}
 
 	@Override
@@ -292,6 +293,15 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 		pageNum--;
 		setState(LOADING_FAILED);
 		mPullRefreshListView.onRefreshComplete();
+	}
+
+	@Override
+	public void onRestartActivity() {
+		mPullRefreshListView.setMode(Mode.BOTH);
+		mRefreshType = RefreshType.REFRESH;
+		pageNum = 0;
+		lastItemTime = getCurrentTime();
+		getMyFavourite();		
 	}
 
 }

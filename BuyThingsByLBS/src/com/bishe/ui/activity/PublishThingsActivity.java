@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +17,13 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.bishe.MyApplication;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.logic.ThingsImageLogic;
 import com.bishe.logic.ThingsImageLogic.IsUploadImageListener;
 import com.bishe.logic.ThingsLogic.IsPublishListener;
 import com.bishe.logic.ThingsLogic;
+import com.bishe.logic.ThingsLogic.IsUpdateListener;
 import com.bishe.logic.UserLogic;
 import com.bishe.model.Things;
 import com.bishe.model.ThingsImage;
@@ -29,13 +32,15 @@ import com.bishe.ui.base.BasePageActivity;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.CreateBmpFactory;
 import com.bishe.utils.LogUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 /**
  * @author robin
  * @date 2015-4-25 Copyright 2015 The robin . All rights reserved
  */
 public class PublishThingsActivity extends BasePageActivity implements
-		IsUploadImageListener, IsPublishListener {
+		IsUploadImageListener, IsPublishListener, IsUpdateListener {
 
 	private GridView gvCommodityImage;
 	private EditText mEditThingsDdescription;
@@ -48,10 +53,13 @@ public class PublishThingsActivity extends BasePageActivity implements
 	private ThingsImageLogic mImageLogic;
 	private CreateBmpFactory mBmpFactory;
 
+	private Things mThings;
+
 	@Override
 	protected void setLayoutView() {
 		setContentView(R.layout.activity_publish_layout);
 		setOverflowShowingAlways();
+		mThings = (Things) getIntent().getSerializableExtra("data");
 	}
 
 	@Override
@@ -64,15 +72,56 @@ public class PublishThingsActivity extends BasePageActivity implements
 
 	@Override
 	protected void setupViews(Bundle bundle) {
+	
+		mUserLogic = new UserLogic(mContext);
+		mThingsLogic = new ThingsLogic(mContext);
+		mImageLogic = new ThingsImageLogic(mContext);
+		mBmpFactory = new CreateBmpFactory(PublishThingsActivity.this);
+		
 		ActionBar actionBar = getActionBar();
-		actionBar.setTitle("发布物品");
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		if (null != mThings) {
+			mEditThingsDdescription.setText(mThings.getContent());
+			mEditThingsPrice.setText("" + mThings.getPrice());
+			if (null != mThings.getThingsImage()) {
+				mImageView.setVisibility(View.VISIBLE);
+				ImageLoader
+						.getInstance()
+						.displayImage(
+								mThings.getThingsImage().getFileUrl(mContext) == null ? ""
+										: mThings.getThingsImage().getFileUrl(
+												mContext),
+								mImageView,
+								MyApplication.getInstance().getOptions(
+										R.drawable.bg_pic_loading),
+								new SimpleImageLoadingListener() {
+									@Override
+									public void onLoadingComplete(
+											String imageUri, View view,
+											Bitmap loadedImage) {
+										super.onLoadingComplete(imageUri, view,
+												loadedImage);
+										LogUtils.i(TAG, "加载图片" + imageUri
+												+ "成功");
+
+									}
+
+								});
+			}
+			actionBar.setTitle("修改物品");
+			
+		}else {
+			actionBar.setTitle("发布物品");
+		}
 
 	}
 
 	@Override
 	protected void setListener() {
-
+		mThingsLogic.setOnIsUpdateListener(this);
+		mImageLogic.setIsUploadImageListener(this);
+		mThingsLogic.setOnIsPublishListener(this);
 		mImageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -83,17 +132,15 @@ public class PublishThingsActivity extends BasePageActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode, data);
+		mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode,
+				data);
 		mImageView.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	@Override
 	protected void fetchData() {
-		mUserLogic = new UserLogic(mContext);
-		mThingsLogic = new ThingsLogic(mContext);
-		mImageLogic = new ThingsImageLogic(mContext);
-		mBmpFactory = new CreateBmpFactory(PublishThingsActivity.this);
+
 	}
 
 	@Override
@@ -148,7 +195,21 @@ public class PublishThingsActivity extends BasePageActivity implements
 			ActivityUtils.toastShowCenter(this, "内容不能为空");
 			return;
 		}
-		uploadImage(mImagePath);
+		if (null == mThings) {
+			uploadImage(mImagePath);
+		} else if (null == mImagePath) {
+			updateThings(mThings);
+		} else {
+			uploadImage(mImagePath);
+		}
+
+	}
+
+	private void updateThings(Things things) {
+
+		things.setContent(mEditThingsDdescription.getText().toString());
+		things.setPrice(Integer.valueOf(mEditThingsPrice.getText().toString()));
+		mThingsLogic.updateThings(things);
 	}
 
 	private Things initThings(final String thingsDescription,
@@ -168,21 +229,26 @@ public class PublishThingsActivity extends BasePageActivity implements
 	}
 
 	private void uploadImage(String path) {
-		mImageLogic.setIsUploadImageListener(this);
+
 		mImageLogic.upLoadImageWithPath(path);
 	}
 
 	private void publishNewThings(Things things) {
-		mThingsLogic.setOnIsPublishListener(this);
+
 		mThingsLogic.publishThings(things);
 	}
 
 	@Override
 	public void onUploadImageSuccess(ThingsImage image) {
-		Things things = initThings(
-				mEditThingsDdescription.getText().toString(), mEditThingsPrice
-						.getText().toString(), image);
-		publishNewThings(things);
+		if (null == mThings) {
+			Things things = initThings(mEditThingsDdescription.getText()
+					.toString(), mEditThingsPrice.getText().toString(), image);
+			publishNewThings(things);
+		} else {
+			mThings.setThingsImage(image);
+			updateThings(mThings);
+		}
+
 	}
 
 	@Override
@@ -225,9 +291,25 @@ public class PublishThingsActivity extends BasePageActivity implements
 			return false;
 		}
 		// 谁可以看到的设置
-		if (null == mImagePath) {
+		if (null == mImageView && null == mThings && null == mThings.getThingsImage()) {
 			return false;
 		}
 		return true;
 	}
+
+	@Override
+	public void onUpdateSuccess() {
+		ActivityUtils.toastShowBottom(PublishThingsActivity.this, "修改成功！");
+		LogUtils.i(TAG, "创建成功。");
+		setResult(RESULT_OK);
+		finish();
+	}
+
+	@Override
+	public void onUpdateFailure(String msg) {
+		ActivityUtils.toastShowBottom(PublishThingsActivity.this, "修改失败！yg"
+				+ msg);
+		LogUtils.i(TAG, "创建失败。" + msg);
+	}
+	
 }

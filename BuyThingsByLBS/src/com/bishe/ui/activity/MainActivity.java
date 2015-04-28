@@ -7,11 +7,13 @@ import android.widget.Toast;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.logic.UserLogic;
 import com.bishe.model.User;
+import com.bishe.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.fragment.BuyThingsFragment;
 import com.bishe.ui.fragment.MainFragment;
 import com.bishe.ui.fragment.MyFavouriteFragment;
+import com.bishe.ui.fragment.MainFragment.RefreshType;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
 
@@ -133,5 +135,18 @@ public class MainActivity extends BaseHomeActivity {
 		}
 		return true;
 	}
-	
+
+	public interface OnMainActivityListener{
+		void onRestartActivity();
+	}
+	private OnMainActivityListener mActivityListener;
+	public void setOnMainActivityListener(OnMainActivityListener activityListener)
+	{
+		this.mActivityListener = activityListener;
+	}
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		mActivityListener.onRestartActivity();
+	}
 }
