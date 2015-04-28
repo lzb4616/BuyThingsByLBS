@@ -29,6 +29,8 @@ import com.bishe.logic.UserLogic.OnCollectMyFavouriteListener;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
+import com.bishe.ui.activity.PersonalInfoActivity;
+import com.bishe.ui.activity.PersonalThingsActivity;
 import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.BitmapUtils;
@@ -104,9 +106,9 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		viewHolder.contentText.setText(entity.getContent());
 		viewHolder.thingsDistance.setText("200米");
 		viewHolder.thingsLocation.setText("广州");
-		viewHolder.thingsPhone.setText(""+entity.getAuthor().getPhoneNum());
+		viewHolder.thingsPhone.setText("" + entity.getAuthor().getPhoneNum());
 		viewHolder.thingsPrice.setText(String.valueOf(entity.getPrice()));
-		viewHolder.comment.setText("评论:"+entity.getComment());
+		viewHolder.comment.setText("评论:" + entity.getComment());
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl(mContext);
@@ -138,13 +140,10 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 							.startActivity(intent);
 					return;
 				}
-				LogUtils.i(TAG, "这里到时去个人界面");
-				// TODO Auto-generated method stub
-				// MyApplication.getInstance().setCurrentThings(entity);
-				// Intent intent = new Intent();
-				// intent.setClass(MyApplication.getInstance().getTopActivity(),
-				// PersonalActivity.class);
-				// mContext.startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(mContext, PersonalThingsActivity.class);
+				intent.putExtra("user", entity.getAuthor());
+				mContext.startActivity(intent);
 			}
 		});
 

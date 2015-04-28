@@ -3,9 +3,7 @@ package com.bishe.logic;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.BmobQuery.CachePolicy;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
@@ -323,4 +321,122 @@ public class ThingsLogic {
 			}
 		});
 	}
+	
+	/**
+	 * 获取用户的东西列表
+	 * 
+	 * */
+	public interface OnGetUserThingsListener {
+		void onGetUserThingsSuccess(List<Things> data);
+
+		void onGetUserThingsFailure(String msg);
+	}
+
+	private OnGetUserThingsListener mOnGetUserThingsListener;
+
+	public void setOnGetUserThingsListener(
+			OnGetUserThingsListener getUserThingsListener) {
+		this.mOnGetUserThingsListener = getUserThingsListener;
+	}
+
+	/**
+	 *获取用户发布的东西列表
+	 * */
+	public void getUserPublishThings(User user,int pageNum) {
+		if (user != null) {
+			BmobQuery<Things> query = new BmobQuery<Things>();
+			query.setLimit(Constant.NUMBERS_PER_PAGE);
+			query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum));
+			query.order("-createdAt");
+			query.include("author");
+			query.addWhereEqualTo("author", user);
+			query.findObjects(mContext, new FindListener<Things>() {
+				
+				@Override
+				public void onSuccess(List<Things> data) {
+					if (null == mOnGetUserThingsListener) {
+						LogUtils.i(TAG,
+								"mOnGetUserThingsListener is null,you must set one!");
+						return;
+					}
+					mOnGetUserThingsListener.onGetUserThingsSuccess(data);
+				}
+
+				@Override
+				public void onError(int arg0, String msg) {
+					if (null == mOnGetUserThingsListener) {
+						LogUtils.i(TAG,
+								"mOnGetUserThingsListener is null,you must set one!");
+						return;
+					}
+					mOnGetUserThingsListener.onGetUserThingsFailure(msg);
+				}
+			});
+		} else {
+			// 前往登录注册界面
+			ActivityUtils.toastShowBottom((Activity) mContext, "获取前请先登录。");
+			Intent intent = new Intent();
+			intent.setClass(mContext, LoginAndRegisterActivity.class);
+			MyApplication.getInstance().getTopActivity()
+					.startActivity(intent);
+		}
+	}
+	
+	/**
+	 * 获取我的已购东西列表
+	 * 
+	 * */
+	public interface OnGetMyHadBuyThingsListener {
+		void onGetMyHadBuyThingsSuccess(List<Things> data);
+
+		void onGetMyHadBuyThingsFailure(String msg);
+	}
+
+	private  OnGetMyHadBuyThingsListener mBuyThingsListener;
+
+	public void setOnGetMyHadBuyThingsListener(
+			OnGetMyHadBuyThingsListener buyThingsListener) {
+		this.mBuyThingsListener = buyThingsListener;
+	}
+
+	public void getMyHadBuyThings() {
+		User user = mUserLogic.getCurrentUser();
+		if (user != null) {
+			BmobQuery<Things> query = new BmobQuery<Things>();
+			query.addWhereRelatedTo("buyThing", new BmobPointer(user));
+			query.include("user");
+			query.order("createdAt");
+			query.setLimit(Constant.NUMBERS_PER_PAGE);
+			query.findObjects(mContext, new FindListener<Things>() {
+
+				@Override
+				public void onSuccess(List<Things> data) {
+					if (null == mBuyThingsListener) {
+						LogUtils.i(TAG,
+								"mBuyThingsListener is null,you must set one!");
+						return;
+					}
+					mBuyThingsListener.onGetMyHadBuyThingsSuccess(data);
+				}
+
+				@Override
+				public void onError(int arg0, String arg1) {
+					if (null == mBuyThingsListener) {
+						LogUtils.i(TAG,
+								"mBuyThingsListener is null,you must set one!");
+						return;
+					}
+					mBuyThingsListener.onGetMyHadBuyThingsFailure(TAG);
+				}
+			});
+		} else {
+			// 前往登录注册界面
+			ActivityUtils.toastShowBottom((Activity) mContext, "获取前请先登录。");
+			Intent intent = new Intent();
+			intent.setClass(mContext, LoginAndRegisterActivity.class);
+			MyApplication.getInstance().getTopActivity()
+					.startActivity(intent);
+		}
+	}
+	
 }

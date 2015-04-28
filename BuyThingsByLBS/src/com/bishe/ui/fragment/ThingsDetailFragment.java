@@ -40,6 +40,8 @@ import com.bishe.model.Comment;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
+import com.bishe.ui.activity.PersonalThingsActivity;
+import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
@@ -185,13 +187,10 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 							.startActivity(intent);
 					return;
 				}
-				LogUtils.i(TAG, "这里到时去个人界面");
-				// TODO Auto-generated method stub
-				// MyApplication.getInstance().setCurrentThings(entity);
-				// Intent intent = new Intent();
-				// intent.setClass(MyApplication.getInstance().getTopActivity(),
-				// PersonalActivity.class);
-				// mContext.startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(mContext, PersonalThingsActivity.class);
+				intent.putExtra("user", entity.getAuthor());
+				mContext.startActivity(intent);
 			}
 		});
 

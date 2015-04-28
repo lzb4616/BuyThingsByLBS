@@ -15,6 +15,7 @@ public class Things extends BmobObject {
 	private boolean isBuy;
 	private boolean myFav;
 	private int price;
+	private Location thingsLocation;
 	private BmobRelation relation;
 
 	public int getPrice() {
@@ -88,6 +89,14 @@ public class Things extends BmobObject {
 	public void setBuy(boolean isBuy) {
 		this.isBuy = isBuy;
 	}
+	public Location getThingsLocation() {
+		return thingsLocation;
+	}
+
+	public void setThingsLocation(Location thingsLocation) {
+		this.thingsLocation = thingsLocation;
+	}
+
 	@Override
 	public String toString() {
 		return "Things [author=" + author.toString() + ", content=" + content

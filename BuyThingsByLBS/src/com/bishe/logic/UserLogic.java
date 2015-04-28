@@ -9,7 +9,6 @@ import cn.bmob.v3.listener.UpdateListener;
 import com.bishe.MyApplication;
 import com.bishe.adapter.ThingsContentAdapter;
 import com.bishe.config.Constant;
-import com.bishe.model.Location;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
@@ -246,7 +245,6 @@ public class UserLogic {
 		User user = getCurrentUser();
 		if (user != null && user.getSessionToken() != null) {
 			BmobRelation favRelaton = new BmobRelation();
-			things.setMyFav(!things.isMyFav());
 			if (isCollect) {
 				favRelaton.add(things);
 				user.setFavorite(favRelaton);
@@ -301,7 +299,174 @@ public class UserLogic {
 			intent.setClass(mContext, LoginAndRegisterActivity.class);
 			MyApplication.getInstance().getTopActivity()
 					.startActivityForResult(intent, ThingsContentAdapter.SAVE_FAVOURITE);
-		}
+		} 
 	}
+	
+	
+	public interface OnPublishMyThingsListener {
+		void onPublishMyThingsSuccess();
+
+		void onPublishMythingsFailure(String msg);
+
+	}
+
+	private OnPublishMyThingsListener mOnPublishMyThingsListener;
+
+	public void setOnPublishMyThingsListener(
+			OnPublishMyThingsListener myThingsListener) {
+		this.mOnPublishMyThingsListener = myThingsListener;
+
+	}
+
+	/**
+	 * 发布我的东西，进行跟用户关联
+	 * 
+	 * @param things != nil
+	 * @param isPublishOrDelete = ture发布。 = false 删除
+	 * */
+	public void publishMyThings(Things things,Boolean isPublishOrDelete) {
+		User user = getCurrentUser();
+		if (user != null && user.getSessionToken() != null) {
+			BmobRelation publishRelaton = new BmobRelation();
+			if (isPublishOrDelete) {
+				publishRelaton.add(things);
+				user.setPublish(publishRelaton);
+				user.update(mContext, new UpdateListener() {
+					@Override
+					public void onSuccess() {
+						if (null == mOnPublishMyThingsListener) {
+							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnPublishMyThingsListener.onPublishMyThingsSuccess();
+					}
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						if (null == mOnPublishMyThingsListener) {
+							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnPublishMyThingsListener.onPublishMythingsFailure(arg1);
+					}
+				});
+
+			} else {
+				publishRelaton.remove(things);
+				user.setPublish(publishRelaton);
+				user.update(mContext, new UpdateListener() {
+
+					@Override
+					public void onSuccess() {
+						if (null == mOnPublishMyThingsListener) {
+							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnPublishMyThingsListener.onPublishMyThingsSuccess();
+					}
+
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						if (null == mOnPublishMyThingsListener) {
+							LogUtils.i(TAG, "mOnPublishMyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnPublishMyThingsListener.onPublishMythingsFailure(arg1);
+					}
+				});
+			}
+
+		} else {
+			// 前往登录注册界面
+			ActivityUtils.toastShowBottom((Activity) mContext, "收藏前请先登录。");
+			Intent intent = new Intent();
+			intent.setClass(mContext, LoginAndRegisterActivity.class);
+			MyApplication.getInstance().getTopActivity()
+					.startActivity(intent);
+		} 
+	}
+	
+	
+	public interface OnBuyThingsListener {
+		void onBuyThingsSuccess();
+
+		void onBuyThingsFailure(String msg);
+
+	}
+	
+	private OnBuyThingsListener mOnBuyThingsListener;;
+
+	public void setOnBuyThingsListener(
+			OnBuyThingsListener onBuyThingsListener) {
+		this.mOnBuyThingsListener = onBuyThingsListener;
+
+	}
+
+	/**
+	 * 购买东西
+	 * 
+	 * @param things != nil
+	 * @param isBuy = ture购买。 = false 取消购买
+	 * */
+	public void buyThings(Things things,Boolean isBuy) {
+		User user = getCurrentUser();
+		if (user != null && user.getSessionToken() != null) {
+			BmobRelation buyRelaton = new BmobRelation();
+			if (isBuy) {
+				buyRelaton.add(things);
+				user.setBuyThing(buyRelaton);
+				user.update(mContext, new UpdateListener() {
+					@Override
+					public void onSuccess() {
+						if (null == mOnBuyThingsListener) {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnBuyThingsListener.onBuyThingsSuccess();
+					}
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						if (null == mOnBuyThingsListener) {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnBuyThingsListener.onBuyThingsFailure(arg1);
+					}
+				});
+
+			} else {
+				buyRelaton.remove(things);
+				user.setPublish(buyRelaton);
+				user.update(mContext, new UpdateListener() {
+
+					@Override
+					public void onSuccess() {
+						if (null == mOnBuyThingsListener) {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnBuyThingsListener.onBuyThingsSuccess();
+					}
+
+					@Override
+					public void onFailure(int arg0, String arg1) {
+						if (null == mOnBuyThingsListener) {
+							LogUtils.i(TAG, "mOnBuyThingsListener is null,you must set one!");						} else {
+							return;
+						}
+						mOnBuyThingsListener.onBuyThingsFailure(arg1);
+					}
+				});
+			}
+
+		} else {
+			// 前往登录注册界面
+			ActivityUtils.toastShowBottom((Activity) mContext, "收藏前请先登录。");
+			Intent intent = new Intent();
+			intent.setClass(mContext, LoginAndRegisterActivity.class);
+			MyApplication.getInstance().getTopActivity()
+					.startActivity(intent);
+		} 
+	}
+	
 
 }
