@@ -10,6 +10,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import cn.bmob.v3.BmobUser;
 
 import com.bishe.MyApplication;
 import com.bishe.adapter.CommentAdapter;
@@ -90,6 +95,8 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	private CommentLogic mCommentLogic;
 	private Boolean mIsCollect;
 
+	private Boolean mIsBuy;
+	
 	public static BaseFragment newInstance() {
 		BaseFragment fragment = new ThingsDetailFragment();
 		Bundle args = new Bundle();
@@ -482,7 +489,8 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 			ActivityUtils.toastShowCenter(mContext, "这个东西已经售出，如果需要请联系买家");
 			return;
 		}
-		mUserLogic.buyThings(mThings, true);
+		mIsBuy = true;
+		mUserLogic.buyThings(mThings, mIsBuy);
 	}
 
 	@Override
@@ -501,8 +509,13 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 
 	@Override
 	public void onBuyThingsSuccess() {
-		mThings.setBuy(true);
-		mThingsLogic.updateThings(mThings);
+		if (mIsBuy) {
+			mThings.setBuy(true);
+			mThingsLogic.updateThings(mThings);
+		}else {
+			mThings.setBuy(false);
+			mThingsLogic.updateThings(mThings);
+		}
 	}
 
 	@Override
@@ -524,13 +537,53 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 
 	@Override
 	public void onUpdateSuccess() {
-		mBuytagView.setVisibility(mThings.isBuy()?View.VISIBLE:View.GONE);		
-		ActivityUtils.toastShowBottom(mContext, "购买成功");
+		mBuytagView.setVisibility(mThings.isBuy()?View.VISIBLE:View.GONE);	
+		if (mIsBuy) {
+			ActivityUtils.toastShowBottom(mContext, "购买成功");
+		}else {
+			ActivityUtils.toastShowBottom(mContext, "取消售出成功");
+		}
+		
 	}
 
 	@Override
 	public void onUpdateFailure(String msg) {
 		ActivityUtils.toastShowBottom(mContext, "购买失败"+msg);		
+	}
+
+	@Override
+	public void cancelBuyThings() {
+		if (!mThings.isBuy()) {
+			ActivityUtils.toastShowCenter(mContext, "这个东西已经取消售出");
+			return;
+		}
+		mIsBuy = false;
+		mUserLogic.buyThings(mThings, mIsBuy);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		MenuItem item = menu.findItem(R.id.action_cancel_buy);
+		if (isCurrentUser(mThings.getAuthor())) {
+			item.setVisible(true);
+		} else {
+			item.setVisible(false);
+		}
+	}
+	
+	/**
+	 * 判断点击条目的用户是否是当前登录用户
+	 * @return
+	 */
+	private boolean isCurrentUser(User user){
+		if(null != user){
+			User cUser = mUserLogic.getCurrentUser();
+			if(cUser != null && cUser.getObjectId().equals(user.getObjectId())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

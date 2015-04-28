@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
+import com.bishe.logic.UserLogic;
+import com.bishe.model.User;
 
 import cn.bmob.v3.Bmob;
 import android.R.bool;
@@ -34,7 +36,6 @@ public abstract class BaseHomeActivity extends BaseActivity{
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
-		// TODO Auto-generated method stub
 		super.onCreate(bundle);
 		Bmob.initialize(this, Constant.BMOB_APP_ID);
 		setContentView(R.layout.activity_main);
@@ -81,6 +82,7 @@ public abstract class BaseHomeActivity extends BaseActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(getMenuRes(), menu);
+	
 		return true;
 	}
 	

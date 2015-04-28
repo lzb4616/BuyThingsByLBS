@@ -16,5 +16,6 @@
     <string name="action_mythings">我的东西</string>
     <string name="action_buy">购买</string>
     <string name="action_hadbuy">我购买的东西</string>
+    <string name="action_cancel_buy">取消购买</string>
 </resources>
                                          

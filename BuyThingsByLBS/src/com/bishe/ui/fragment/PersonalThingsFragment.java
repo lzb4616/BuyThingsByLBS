@@ -211,6 +211,10 @@ public class PersonalThingsFragment extends BaseHomeFragment implements OnGetUse
 			mContentAdapter.notifyDataSetChanged();
 			mPullToRefreshListView.onRefreshComplete();
 		}else{
+			if(mRefreshType == RefreshType.REFRESH){
+				mThingsList.clear();
+				mContentAdapter.notifyDataSetChanged();
+			}
 			ActivityUtils.toastShowBottom(mContext, "暂无更多数据~");
 			pageNum--;
 			mPullToRefreshListView.onRefreshComplete();

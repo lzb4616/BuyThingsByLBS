@@ -193,6 +193,11 @@ public class BuyThingsFragment extends BaseHomeFragment implements OnGetMyHadBuy
 			mContentAdapter.notifyDataSetChanged();
 			mPullToRefreshListView.onRefreshComplete();
 		}else{
+			if(mRefreshType == RefreshType.REFRESH){
+				mThingsList.clear();
+				mContentAdapter.notifyDataSetChanged();
+			}
+			
 			ActivityUtils.toastShowBottom(mContext, "暂无更多数据~");
 			pageNum--;
 			mPullToRefreshListView.onRefreshComplete();

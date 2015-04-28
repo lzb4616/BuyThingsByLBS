@@ -1,5 +1,6 @@
 package com.bishe.ui.activity;
 
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -9,12 +10,9 @@ import com.bishe.model.User;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.fragment.BuyThingsFragment;
-import com.bishe.ui.fragment.LoginFragment;
 import com.bishe.ui.fragment.MainFragment;
 import com.bishe.ui.fragment.MyFavouriteFragment;
-import com.bishe.ui.fragment.PersonalInfoEditFragment;
-import com.bishe.ui.fragment.RegisterFragment;
-import com.bishe.ui.fragment.TestFragment;
+import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
 
 /**
@@ -78,6 +76,8 @@ public class MainActivity extends BaseHomeActivity {
 			break;
 		case R.id.action_login_out:
 			mUserLogic.loginOut();
+			ActivityUtils.toastShowBottom(this, "退出登录成功");
+			invalidateOptionsMenu();
 			break;
 		case android.R.id.home:
 			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
@@ -110,6 +110,28 @@ public class MainActivity extends BaseHomeActivity {
 		mFavouriteFragment = new MyFavouriteFragment();
 		mBuyThingsFragment = new BuyThingsFragment();
 		mSelectFragment = SelectFragmentType.MAINFRAGMENT;
-	}
 
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		invalidateOptionsMenu();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuItem login_out_item = menu.findItem(R.id.action_login_out);
+		MenuItem login_item = menu.findItem(R.id.action_login);
+		if (null == mUserLogic.getCurrentUser()) {
+			login_item.setVisible(true);
+			login_out_item.setVisible(false);
+		}else {
+			login_item.setVisible(false);
+			login_out_item.setVisible(true);
+		}
+		return true;
+	}
+	
 }

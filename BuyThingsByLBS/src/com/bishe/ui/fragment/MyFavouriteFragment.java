@@ -30,6 +30,7 @@ import com.bishe.pulltorefresh.library.PullToRefreshBase.State;
 import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
+import com.bishe.ui.fragment.PersonalThingsFragment.RefreshType;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
 
@@ -216,6 +217,10 @@ public class MyFavouriteFragment extends BaseHomeFragment implements OnGetMyFavo
 			setState(LOADING_COMPLETED);
 			mPullRefreshListView.onRefreshComplete();
 		}else{
+			if(mRefreshType == RefreshType.REFRESH){
+				mListItems.clear();
+				mAdapter.notifyDataSetChanged();
+			}
 			ActivityUtils.toastShowBottom(getActivity(), "暂无更多数据~");
 			pageNum--;
 			setState(LOADING_COMPLETED);
