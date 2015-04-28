@@ -26,6 +26,11 @@
     <item
         android:id="@+id/action_login_out"
         android:title="@string/action_loginOut"/>
+    
+    <item
+        android:id="@+id/action_my_info"
+        android:icon="@drawable/navigationbar_me_2x"
+        android:title="@string/action_my_info"/>
     <item
         android:id="@+id/action_about"
         android:icon="@drawable/actionbar_item_about"

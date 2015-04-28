@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <RelativeLayout
+            android:id="@+id/user_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/user_icon_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="头像" />
+
+            <ImageView
+                android:id="@+id/user_icon_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="#eeeeee"
+                android:scaleType="centerInside"
+                android:src="@drawable/user_icon_default_main" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <RelativeLayout
+            android:id="@+id/user_nick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/user_nick_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="昵称" />
+
+            <com.bishe.view.DeletableEditText
+                android:id="@+id/user_nick_edv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_edittext_account"
+                android:drawableRight="@drawable/user_delete"
+                android:ems="10"
+                android:hint="你的大名"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:singleLine="true"
+                android:textSize="15sp" >
+            </com.bishe.view.DeletableEditText>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <RelativeLayout
+            android:id="@+id/sex_choice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/sex_choice_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="性别" />
+
+            <CheckBox
+                android:id="@+id/sex_choice_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:button="@drawable/selector_sex_choice"
+                android:checked="true"
+                android:scaleType="centerInside" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <RelativeLayout
+            android:id="@+id/user_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/user_phone_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="手机号码" />
+
+            <com.bishe.view.DeletableEditText
+                android:id="@+id/user_phone_edv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/user_phone_tips"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_edittext_account"
+                android:drawableRight="@drawable/user_delete"
+                android:ems="10"
+                android:hint="请填写手机号码"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:singleLine="true" 
+                android:textSize="15sp" >
+            </com.bishe.view.DeletableEditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/user_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/user_sign_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="个性签名" />
+
+            <com.bishe.view.DeletableEditText
+                android:id="@+id/user_sign_edv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/user_sign_tips"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_edittext_account"
+                android:drawableRight="@drawable/user_delete"
+                android:ellipsize="end"
+                android:ems="10"
+                android:hint="这个人很懒，什么都没有留下"
+                android:maxLines="2"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:textSize="13sp" >
+            </com.bishe.view.DeletableEditText>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/user_info_update"
+            style="@style/TextTheme.tipstheme_buttontext"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/selector_logout"
+            android:gravity="center"
+            android:paddingBottom="12dip"
+            android:paddingTop="12dip"
+            android:text="修改" />
+    </LinearLayout>
+
+</ScrollView>

@@ -163,8 +163,7 @@ public class PublishThingsActivity extends BasePageActivity implements
 		}
 		things.setShare(0);
 		things.setComment(0);
-		things.setPass(true);
-
+		things.setBuy(false);
 		return things;
 	}
 

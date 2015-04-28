@@ -54,10 +54,9 @@ public abstract class BaseHomeActivity extends BaseActivity{
 			mFragmentTransaction.add(R.id.content_frame_base, fragment);
 		}else
 		{
-			hideFragments(fragment);
 			mFragmentTransaction.show(fragment);
 		}
-		
+		hideFragments(fragment);
 		mFragmentTransaction.commit();
 	}
     /**
@@ -68,7 +67,9 @@ public abstract class BaseHomeActivity extends BaseActivity{
      */
     private void hideFragments(BaseFragment baseFragment) {
     	List<Fragment> fList = mFragmentManager.getFragments();
-    		
+    	if (null == fList) {
+			return;
+		}	
     	for (Fragment fragment : fList)
     	{
 			if (!fragment.equals(baseFragment)) {

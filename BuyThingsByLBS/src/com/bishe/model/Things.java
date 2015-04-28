@@ -1,7 +1,6 @@
 package com.bishe.model;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 
 public class Things extends BmobObject {
@@ -13,7 +12,7 @@ public class Things extends BmobObject {
 	private ThingsImage thingsImage;
 	private int share;
 	private int comment;
-	private boolean isPass;
+	private boolean isBuy;
 	private boolean myFav;
 	private int price;
 	private BmobRelation relation;
@@ -66,14 +65,6 @@ public class Things extends BmobObject {
 		this.comment = comment;
 	}
 
-	public boolean isPass() {
-		return isPass;
-	}
-
-	public void setPass(boolean isPass) {
-		this.isPass = isPass;
-	}
-
 	public boolean isMyFav() {
 		return myFav;
 	}
@@ -90,11 +81,20 @@ public class Things extends BmobObject {
 		this.relation = relation;
 	}
 
+	public boolean isBuy() {
+		return isBuy;
+	}
+
+	public void setBuy(boolean isBuy) {
+		this.isBuy = isBuy;
+	}
 	@Override
 	public String toString() {
 		return "Things [author=" + author.toString() + ", content=" + content
 				+ ", thingsImage=" + thingsImage + ", price=" + price
-				+ ", share=" + share + ", comment=" + comment + ", isPass="
-				+ isPass + ", myFav=" + myFav + ", relation=" + relation + "]";
+				+ ", share=" + share + ", comment=" + comment + ", isBuy="
+				+ isBuy + ", myFav=" + myFav + ", relation=" + relation + "]";
 	}
+
+
 }

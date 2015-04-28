@@ -104,7 +104,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		viewHolder.contentText.setText(entity.getContent());
 		viewHolder.thingsDistance.setText("200米");
 		viewHolder.thingsLocation.setText("广州");
-		viewHolder.thingsPhone.setText("18642153461");
+		viewHolder.thingsPhone.setText(""+entity.getAuthor().getPhoneNum());
 		viewHolder.thingsPrice.setText(String.valueOf(entity.getPrice()));
 		viewHolder.comment.setText("评论:"+entity.getComment());
 		String avatarUrl = null;

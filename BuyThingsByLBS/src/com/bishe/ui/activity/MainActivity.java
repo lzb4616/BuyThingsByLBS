@@ -10,6 +10,7 @@ import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.fragment.LoginFragment;
 import com.bishe.ui.fragment.MainFragment;
+import com.bishe.ui.fragment.PersonalInfoEditFragment;
 import com.bishe.ui.fragment.RegisterFragment;
 import com.bishe.ui.fragment.TestFragment;
 import com.bishe.utils.LogUtils;
@@ -24,11 +25,13 @@ public class MainActivity extends BaseHomeActivity {
 	private MainFragment mMainFragment;
 	private TestFragment mLoginFragment;
 	private RegisterFragment mRegisterFragment;
-
+	private PersonalInfoEditFragment mPersonalInfoEditFragment;
+	
+	
 	private SelectFragment mSelectFragment;
 
 	private enum SelectFragment {
-		MAINFRAGMENT, LOGINFRAGMENT, REGISTERFRAGMENT
+		MAINFRAGMENT
 	}
 
 	@Override
@@ -36,10 +39,7 @@ public class MainActivity extends BaseHomeActivity {
 		switch (mSelectFragment) {
 		case MAINFRAGMENT:
 			return mMainFragment;
-		case LOGINFRAGMENT:
-			return mLoginFragment;
-		case REGISTERFRAGMENT:
-			return mRegisterFragment;
+	
 		default:
 			return mMainFragment;
 		}
@@ -64,8 +64,8 @@ public class MainActivity extends BaseHomeActivity {
 		case R.id.action_main:
 			mSelectFragment = SelectFragment.MAINFRAGMENT;
 			break;
-		case R.id.action_settings:
-			mSelectFragment = SelectFragment.LOGINFRAGMENT;
+		case R.id.action_my_info:
+			redictToActivity(mContext, PersonalInfoActivity.class, null);
 			break;
 		case R.id.action_login:
 			redictToActivity(mContext, LoginAndRegisterActivity.class, null);
@@ -100,6 +100,7 @@ public class MainActivity extends BaseHomeActivity {
 		mMainFragment = new MainFragment();
 		mLoginFragment = new TestFragment();
 		mRegisterFragment = new RegisterFragment();
+		mPersonalInfoEditFragment = new PersonalInfoEditFragment();
 		mSelectFragment = SelectFragment.MAINFRAGMENT;
 	}
 

@@ -8,7 +8,6 @@ import cn.bmob.v3.listener.UpdateListener;
 
 import com.bishe.MyApplication;
 import com.bishe.adapter.ThingsContentAdapter;
-import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
 import com.bishe.model.Location;
 import com.bishe.model.Things;
@@ -17,11 +16,9 @@ import com.bishe.ui.activity.LoginAndRegisterActivity;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
 
-import android.R.bool;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.ImageView;
 
 /**
  * @author robin
@@ -146,17 +143,9 @@ public class UserLogic {
 	/**
 	 * 更新用户信息模块
 	 * 
-	 * @param args[0]:userName; args[1]:passWord; args[2]:email; args[3]:sex;
-	 *        args[4]:singnature;
 	 * 
 	 * */
-	public void updateUser(String... args) {
-		User user = getCurrentUser();
-		user.setUsername(args[0]);
-		user.setEmail(args[2]);
-		user.setPassword(args[1]);
-		user.setSex(args[3]);
-		user.setSignature(args[4]);
+	public void updateUser(User user) {
 		user.update(mContext, new UpdateListener() {
 
 			@Override
@@ -256,11 +245,8 @@ public class UserLogic {
 	public void collectMyFav(Things things,Boolean isCollect) {
 		User user = getCurrentUser();
 		if (user != null && user.getSessionToken() != null) {
-
 			BmobRelation favRelaton = new BmobRelation();
-
 			things.setMyFav(!things.isMyFav());
-			things.setPass(false);
 			if (isCollect) {
 				favRelaton.add(things);
 				user.setFavorite(favRelaton);
@@ -317,7 +303,5 @@ public class UserLogic {
 					.startActivityForResult(intent, ThingsContentAdapter.SAVE_FAVOURITE);
 		}
 	}
-	
-	
 
 }

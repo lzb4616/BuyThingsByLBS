@@ -32,6 +32,7 @@
         <activity android:name="com.bishe.ui.activity.LoginAndRegisterActivity" android:launchMode="singleTask"></activity>
         <activity android:launchMode="singleTask" android:name="com.bishe.ui.activity.PublishThingsActivity"></activity>
         <activity android:name="com.bishe.ui.activity.ThingsDetailActivity" android:launchMode="singleTask"></activity>
+        <activity android:launchMode="singleTask" android:name="com.bishe.ui.activity.PersonalInfoActivity"></activity>
     </application>
 
 </manifest>

@@ -12,8 +12,10 @@ public class User extends BmobUser{
 	private String signature;
 	private BmobFile avatar;
 	private BmobRelation favorite;
+	private BmobRelation publish;
+	private BmobRelation buyThing;
 	private Location location;
-	private Double phoneNum;
+	private Long phoneNum;
 	private String sex;
 	
 	
@@ -47,6 +49,24 @@ public class User extends BmobUser{
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
+	public Long getPhoneNum() {
+		return phoneNum;
+	}
+	public void setPhoneNum(Long phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+	public BmobRelation getPublish() {
+		return publish;
+	}
+	public void setPublish(BmobRelation publish) {
+		this.publish = publish;
+	}
+	public BmobRelation getBuyThing() {
+		return buyThing;
+	}
+	public void setBuyThing(BmobRelation buyThing) {
+		this.buyThing = buyThing;
+	}
 	
 	@Override
 	public String toString() {
@@ -54,10 +74,5 @@ public class User extends BmobUser{
 				+ ", favorite=" + favorite + ", location=" + location
 				+ ", sex=" + sex +", phoneNum="+phoneNum+"]";
 	}
-	public Double getPhoneNum() {
-		return phoneNum;
-	}
-	public void setPhoneNum(Double phoneNum) {
-		this.phoneNum = phoneNum;
-	}
+
 }

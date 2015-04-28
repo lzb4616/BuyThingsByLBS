@@ -151,7 +151,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mContentText.setText(entity.getContent());
 		mThingsDistance.setText("200米");
 		mThingsLocation.setText("广州");
-		mThingsPhone.setText("18642153461");
+		mThingsPhone.setText(""+entity.getAuthor().getPhoneNum());
 		mThingsPrice.setText(String.valueOf(entity.getPrice()));
 		mComment.setText("评论："+entity.getComment());
 		String avatarUrl = null;
