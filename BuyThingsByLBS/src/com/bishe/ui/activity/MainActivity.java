@@ -10,6 +10,7 @@ import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.fragment.LoginFragment;
 import com.bishe.ui.fragment.MainFragment;
+import com.bishe.ui.fragment.MyFavouriteFragment;
 import com.bishe.ui.fragment.PersonalInfoEditFragment;
 import com.bishe.ui.fragment.RegisterFragment;
 import com.bishe.ui.fragment.TestFragment;
@@ -23,23 +24,23 @@ public class MainActivity extends BaseHomeActivity {
 
 	private UserLogic mUserLogic;
 	private MainFragment mMainFragment;
-	private TestFragment mLoginFragment;
-	private RegisterFragment mRegisterFragment;
-	private PersonalInfoEditFragment mPersonalInfoEditFragment;
+	private MyFavouriteFragment mFavouriteFragment;
 	
-	
-	private SelectFragment mSelectFragment;
+	private SelectFragmentType mSelectFragment;
 
-	private enum SelectFragment {
-		MAINFRAGMENT
+	private enum SelectFragmentType {
+		MAINFRAGMENT,FAVOURITEFRAGMENT
 	}
 
 	@Override
 	protected BaseFragment getFragment() {
 		switch (mSelectFragment) {
 		case MAINFRAGMENT:
+			setActionBar("主页", null, false);
 			return mMainFragment;
-	
+		case FAVOURITEFRAGMENT:
+			setActionBar("我的收藏", null, true);
+			return mFavouriteFragment;
 		default:
 			return mMainFragment;
 		}
@@ -57,12 +58,12 @@ public class MainActivity extends BaseHomeActivity {
 			publishThingsActivtiy();
 			break;
 		case R.id.action_collection:
-
+			mSelectFragment = SelectFragmentType.FAVOURITEFRAGMENT;
 			break;
 		case R.id.action_about:
 			break;
 		case R.id.action_main:
-			mSelectFragment = SelectFragment.MAINFRAGMENT;
+			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 			break;
 		case R.id.action_my_info:
 			redictToActivity(mContext, PersonalInfoActivity.class, null);
@@ -72,6 +73,9 @@ public class MainActivity extends BaseHomeActivity {
 			break;
 		case R.id.action_login_out:
 			mUserLogic.loginOut();
+			break;
+		case android.R.id.home:
+			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 			break;
 		}
 		initFragment();
@@ -98,10 +102,8 @@ public class MainActivity extends BaseHomeActivity {
 	protected void initData() {
 		mUserLogic = new UserLogic(mContext);
 		mMainFragment = new MainFragment();
-		mLoginFragment = new TestFragment();
-		mRegisterFragment = new RegisterFragment();
-		mPersonalInfoEditFragment = new PersonalInfoEditFragment();
-		mSelectFragment = SelectFragment.MAINFRAGMENT;
+		mFavouriteFragment = new MyFavouriteFragment();
+		mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 	}
 
 }

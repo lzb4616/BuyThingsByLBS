@@ -189,7 +189,7 @@ public class ThingsLogic {
 		this.mMyFavoutiteListener = favoutiteListener;
 	}
 
-	public void getMyFavouriteThings() {
+	public void getMyFavouriteThings(int pageNum) {
 		User user = mUserLogic.getCurrentUser();
 		if (user != null) {
 			BmobQuery<Things> query = new BmobQuery<Things>();
@@ -197,6 +197,10 @@ public class ThingsLogic {
 			query.include("user");
 			query.order("createdAt");
 			query.setLimit(Constant.NUMBERS_PER_PAGE);
+			if (pageNum >= 0) {
+				query.setSkip(Constant.NUMBERS_PER_PAGE*(pageNum));
+			}
+			query.include("author");
 			query.findObjects(mContext, new FindListener<Things>() {
 
 				@Override
