@@ -81,6 +81,8 @@ public class MainActivity extends BaseHomeActivity {
 			ActivityUtils.toastShowBottom(this, "退出登录成功");
 			invalidateOptionsMenu();
 			break;
+		case R.id.action_location:
+			redictToActivity(mContext, MyLoactionActivity.class, null);
 		case android.R.id.home:
 			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 			break;

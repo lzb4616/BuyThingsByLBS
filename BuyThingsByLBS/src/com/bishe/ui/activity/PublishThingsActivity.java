@@ -14,17 +14,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bishe.MyApplication;
 import com.bishe.buythingsbylbs.R;
+import com.bishe.config.Constant;
 import com.bishe.logic.ThingsImageLogic;
 import com.bishe.logic.ThingsImageLogic.IsUploadImageListener;
 import com.bishe.logic.ThingsLogic.IsPublishListener;
 import com.bishe.logic.ThingsLogic;
 import com.bishe.logic.ThingsLogic.IsUpdateListener;
 import com.bishe.logic.UserLogic;
+import com.bishe.model.Location;
 import com.bishe.model.Things;
 import com.bishe.model.ThingsImage;
 import com.bishe.model.User;
@@ -46,14 +50,17 @@ public class PublishThingsActivity extends BasePageActivity implements
 	private EditText mEditThingsDdescription;
 	private EditText mEditThingsPrice;
 	private ImageView mImageView;
-	private EditText mEditThingsPublisherPhone;
+	private TextView mThingsPublisherLocationTv;
 	private String mImagePath;
 	private UserLogic mUserLogic;
 	private ThingsLogic mThingsLogic;
 	private ThingsImageLogic mImageLogic;
 	private CreateBmpFactory mBmpFactory;
 
+	private FrameLayout mFrameLayout;
 	private Things mThings;
+	private Location mLocation;
+	private String mLocationName;
 
 	@Override
 	protected void setLayoutView() {
@@ -67,23 +74,25 @@ public class PublishThingsActivity extends BasePageActivity implements
 		mEditThingsDdescription = (EditText) findViewById(R.id.edit_publish_commodity_description);
 		mEditThingsPrice = (EditText) findViewById(R.id.edit_publish_commodity_price);
 		mImageView = (ImageView) findViewById(R.id.gv_publish_commodityimage_show);
-		mEditThingsPublisherPhone = (EditText) findViewById(R.id.edit_publish_commodity_user_phoneNum);
+		mThingsPublisherLocationTv = (TextView) findViewById(R.id.tv_publish_commodity_location);
+		mFrameLayout = (FrameLayout) findViewById(R.id.framelayout_publish_location);
 	}
 
 	@Override
 	protected void setupViews(Bundle bundle) {
-	
+
 		mUserLogic = new UserLogic(mContext);
 		mThingsLogic = new ThingsLogic(mContext);
 		mImageLogic = new ThingsImageLogic(mContext);
 		mBmpFactory = new CreateBmpFactory(PublishThingsActivity.this);
-		
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		if (null != mThings) {
 			mEditThingsDdescription.setText(mThings.getContent());
 			mEditThingsPrice.setText("" + mThings.getPrice());
+			mThingsPublisherLocationTv.setText(mThings.getLocationName());
 			if (null != mThings.getThingsImage()) {
 				mImageView.setVisibility(View.VISIBLE);
 				ImageLoader
@@ -110,8 +119,8 @@ public class PublishThingsActivity extends BasePageActivity implements
 								});
 			}
 			actionBar.setTitle("修改物品");
-			
-		}else {
+
+		} else {
 			actionBar.setTitle("发布物品");
 		}
 
@@ -128,13 +137,41 @@ public class PublishThingsActivity extends BasePageActivity implements
 				mBmpFactory.OpenGallery();
 			}
 		});
+
+		mFrameLayout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(),
+						MyLoactionActivity.class);
+				startActivityForResult(intent, Constant.GET_LOCATION);
+			}
+		});
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode,
-				data);
-		mImageView.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case Constant.GET_LOCATION:
+				mLocationName = (String) data.getStringExtra("locationName");
+				if (null != mLocationName) {
+					mThingsPublisherLocationTv.setText(mLocationName);
+				}
+				mLocation = (Location) data.getSerializableExtra("location");
+				break;
+
+			default:
+				break;
+			}
+		}
+		if (null != mBmpFactory
+				.getBitmapFilePath(requestCode, resultCode, data)) {
+			mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode,
+					data);
+			mImageView.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
+		}
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -206,9 +243,14 @@ public class PublishThingsActivity extends BasePageActivity implements
 	}
 
 	private void updateThings(Things things) {
-
 		things.setContent(mEditThingsDdescription.getText().toString());
 		things.setPrice(Integer.valueOf(mEditThingsPrice.getText().toString()));
+		if (null != mLocation) {
+			things.setThingsLocation(mLocation);
+		}
+		if (null != mLocationName) {
+			things.setLocationName(mLocationName);
+		}
 		mThingsLogic.updateThings(things);
 	}
 
@@ -221,6 +263,12 @@ public class PublishThingsActivity extends BasePageActivity implements
 		things.setPrice(Integer.valueOf(price));
 		if (image != null) {
 			things.setThingsImage(image);
+		}
+		if (null != mLocation) {
+			things.setThingsLocation(mLocation);
+		}
+		if (null != mLocationName) {
+			things.setLocationName(mLocationName);
 		}
 		things.setShare(0);
 		things.setComment(0);
@@ -291,9 +339,15 @@ public class PublishThingsActivity extends BasePageActivity implements
 			return false;
 		}
 		// 谁可以看到的设置
-		if (null == mImageView && null == mThings && null == mThings.getThingsImage()) {
+		if (null == mImageView && null == mThings
+				&& null == mThings.getThingsImage()) {
 			return false;
 		}
+
+		if (null == mLocationName && null == mThings.getLocationName()) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -311,5 +365,5 @@ public class PublishThingsActivity extends BasePageActivity implements
 				+ msg);
 		LogUtils.i(TAG, "创建失败。" + msg);
 	}
-	
+
 }

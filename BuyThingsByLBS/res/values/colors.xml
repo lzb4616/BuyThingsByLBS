@@ -12,6 +12,7 @@
     <color name="actionbar_background_color">#303537</color>
     <color name="theme_color">#D95555</color>
     <color name="second_color">#888888</color>
+    <color name="price_text_color">#de2f0c</color>
 
     <integer-array name="gplus_colors">
         <item>@color/gplus_color_1</item>

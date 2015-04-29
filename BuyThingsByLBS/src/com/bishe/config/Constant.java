@@ -23,5 +23,7 @@ public class Constant {
 	public static final String SEX_MALE = "male";
 	public static final String SEX_FEMALE = "female";
 	
+	public static final int GET_LOCATION = 16;
+	
 	public final static boolean DEBUG = true;
 }

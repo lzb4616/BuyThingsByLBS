@@ -3,13 +3,13 @@ package com.bishe.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.bmob.v3.datatype.BmobFile;
@@ -21,11 +21,11 @@ import com.bishe.logic.ThingsImageLogic;
 import com.bishe.logic.ThingsImageLogic.IsUploadImageListener;
 import com.bishe.logic.UserLogic;
 import com.bishe.logic.UserLogic.IsUpdateUserListener;
+import com.bishe.model.Location;
 import com.bishe.model.ThingsImage;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
-import com.bishe.ui.activity.MainActivity;
-import com.bishe.ui.base.BaseHomeActivity;
+import com.bishe.ui.activity.MyLoactionActivity;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.CreateBmpFactory;
@@ -51,9 +51,15 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 	private CreateBmpFactory mBmpFactory;
 	private ThingsImageLogic mImageLogic;
 
+	private RelativeLayout mLocationLayout;
+	private TextView mLocationNameTv;
 	private String mImagePath;
 
+	private Location mLocation;
+	private String mLocationName;
+	
 	public static final int GO_LOGIN = 13;
+
 
 	@Override
 	protected int getLayoutId() {
@@ -68,6 +74,9 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 		mSexSwitch = (CheckBox) view.findViewById(R.id.sex_choice_switch);
 		mUpdatetv = (TextView) view.findViewById(R.id.user_info_update);
 		mUserPhone = (EditText) view.findViewById(R.id.user_phone_edv);
+		mLocationLayout = (RelativeLayout) view
+				.findViewById(R.id.user_location_rl);
+		mLocationNameTv = (TextView) view.findViewById(R.id.user_location_tv);
 	}
 
 	@Override
@@ -81,6 +90,7 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 		mUserLogic.setOnUpdateUserListener(this);
 		mUserIcon.setOnClickListener(this);
 		mImageLogic.setIsUploadImageListener(this);
+		mLocationLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -108,13 +118,22 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 			case GO_LOGIN:
 				initPersonalInfo();
 				break;
+			case Constant.GET_LOCATION:
+				mLocationName= (String) data.getStringExtra("locationName");
+				if (null != mLocationName) {
+					mLocationNameTv.setText(mLocationName);
+				}
+				mLocation = (Location) data.getSerializableExtra("location");
+				break;
 			default:
 				break;
 			}
 		}
 		mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode,
 				data);
-		mUserIcon.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
+		if (null != mImagePath) {
+			mUserIcon.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
+		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -128,6 +147,9 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 			mSexSwitch.setChecked(true);
 		} else {
 			mSexSwitch.setChecked(false);
+		}
+		if (null != mCurrentUser.getUserLoactionName()) {
+			mLocationNameTv.setText(mCurrentUser.getUserLoactionName());
 		}
 		BmobFile avatarFile = mCurrentUser.getAvatar();
 		if (null != avatarFile) {
@@ -165,8 +187,13 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 		if (null != image) {
 			user.setAvatar(image);
 		}
+		if (null != mLocation) {
+			user.setLocation(mLocation);
+		}
+		if (null != mLocationName) {
+			user.setUserLoactionName(mLocationNameTv.getText().toString());
+		}
 		return user;
-
 	}
 
 	private void updateUserInfo(User user) {
@@ -185,6 +212,9 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 		case R.id.user_icon_image:
 			mBmpFactory.OpenGallery();
 			break;
+		case R.id.user_location_rl:
+			Intent intent = new Intent(mContext, MyLoactionActivity.class);
+			mContext.startActivityForResult(intent, Constant.GET_LOCATION);
 		default:
 			break;
 		}

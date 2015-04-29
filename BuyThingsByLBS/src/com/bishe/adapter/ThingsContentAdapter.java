@@ -103,22 +103,30 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		if (user.getAvatar() == null) {
 			LogUtils.i("user", "USER avatar IS NULL");
 		}
-
 		viewHolder.userName.setText(entity.getAuthor().getUsername());
 		viewHolder.contentText.setText(entity.getContent());
-		viewHolder.thingsDistance.setText("200米");
-		viewHolder.thingsLocation.setText("广州");
+		if (null!= entity.getAuthor().getLocation()) {
+			double distance = entity.getThingsLocation().distanceInKilometersTo(mUserLogic.getCurrentUser().getLocation());
+			if (distance > 10.0) {
+				viewHolder.thingsDistance.setText(""+(int)distance+" km");
+			}
+			else {
+				distance *= 1000;
+				viewHolder.thingsDistance.setText(""+(int)distance+" m");
+			}
+		}else {
+			viewHolder.thingsDistance.setText("0米");
+		}
+		viewHolder.thingsLocation.setText(entity.getLocationName());
 		if (null ==entity.getAuthor().getPhoneNum()) {
 			viewHolder.thingsPhone.setText("");
 		}else {
 			viewHolder.thingsPhone.setText(""+entity.getAuthor().getPhoneNum());
 		}
-		
 		viewHolder.thingsPrice.setText(String.valueOf(entity.getPrice()));
 		viewHolder.comment.setText("评论:" + entity.getComment());
 		viewHolder.buytagView.setImageBitmap(((BitmapDrawable)mContext.getResources().getDrawable(R.drawable.icon_tag_2x)).getBitmap());
 		viewHolder.buytagView.setVisibility(entity.isBuy()?View.VISIBLE:View.GONE);
-		
 		String avatarUrl = null;
 		if (user.getAvatar() != null) {
 			avatarUrl = user.getAvatar().getFileUrl(mContext);

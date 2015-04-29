@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bishe.ui.MainActivity" >
 
+     <item
+        android:id="@+id/action_location"
+        android:icon="@drawable/add_lbs"
+        android:showAsAction="always"
+        android:title="@string/action_location"/>
     <item
         android:id="@+id/action_publish"
         android:icon="@drawable/actionbar_add_icon"

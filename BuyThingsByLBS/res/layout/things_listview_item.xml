@@ -14,6 +14,27 @@
         android:src="@drawable/user_icon_default_main" />
 
     <TextView
+        android:id="@+id/things_price_text"
+        style="@style/TextTheme"
+        android:layout_alignBottom="@id/user_logo"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/user_logo"
+        android:layout_margin="4dp"
+         android:textSize="20sp"
+        android:text="599" />
+
+    <TextView
+        android:id="@+id/things_price_tv"
+        style="@style/TextTheme"
+        android:layout_alignBottom="@id/user_logo"
+        android:layout_alignTop="@id/user_logo"
+        android:layout_margin="4dp"
+        android:layout_toLeftOf="@id/things_price_text"
+        android:textSize="20sp"
+        android:textColor="@color/price_text_color"
+        android:text="￥" />
+
+    <TextView
         android:id="@+id/user_name"
         style="@style/TextTheme"
         android:layout_alignBottom="@id/user_logo"
@@ -23,30 +44,11 @@
         android:gravity="center_vertical"
         android:text="岁月抚伤" />
 
-    <TextView
-        android:id="@+id/things_distance_text"
-        style="@style/TextTheme"
-        android:layout_alignBottom="@id/user_logo"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/user_logo"
-        android:layout_margin="4dp"
-        android:text="500米" />
-
-    <TextView
-        android:id="@+id/things_location_text"
-        style="@style/TextTheme"
-        android:layout_alignBottom="@id/user_logo"
-        android:layout_alignTop="@id/user_logo"
-        android:layout_margin="4dp"
-        android:layout_toLeftOf="@id/things_distance_text"
-        android:text="广州" />
-
     <FrameLayout
         android:id="@+id/content_image_fl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_logo" 
-        >
+        android:layout_below="@id/user_logo" >
 
         <ImageView
             android:id="@+id/content_image"
@@ -71,41 +73,64 @@
             android:scaleType="centerInside"
             android:src="@drawable/icon_tag_2x"
             android:visibility="visible" />
-
     </FrameLayout>
 
     <RelativeLayout
-        android:id="@+id/things_msg_rl"
+        android:id="@+id/things_phone_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/content_image_fl" >
 
         <TextView
-            android:id="@+id/things_price_tv"
+            android:id="@+id/things_phone_text"
             style="@style/TextTheme"
             android:layout_margin="4dp"
-            android:text="￥" />
-
-        <TextView
-            android:id="@+id/things_price_text"
-            style="@style/TextTheme"
-            android:layout_margin="4dp"
-            android:layout_toRightOf="@id/things_price_tv"
-            android:text="599" />
+            android:text="联系方式-" />
 
         <TextView
             android:id="@+id/user_phoneNum_text"
             style="@style/TextTheme"
-            android:layout_alignParentRight="true"
             android:layout_margin="4dp"
+            android:layout_toRightOf="@id/things_phone_text"
             android:text="18888888888" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/things_msg_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/things_phone_rl" >
+
+        <ImageView 
+            android:id="@+id/user_location_iv"
+            android:layout_width="10dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="4dp"
+            android:src="@drawable/home_lbs_2x"
+            />
         <TextView
-            android:id="@+id/things_phone_text"
+            android:id="@+id/things_location_text"
+            style="@style/TextTheme"
+            android:layout_toRightOf="@id/user_location_iv"
+            android:layout_margin="4dp"
+            android:text="广州" />
+
+          <TextView
+            android:id="@+id/things_distance_tv"
             style="@style/TextTheme"
             android:layout_margin="4dp"
-            android:layout_toLeftOf="@id/user_phoneNum_text"
-            android:text="联系方式-" />
+            android:layout_below="@id/things_location_text"
+            android:text="距离你有：" 
+            android:textColor="@color/price_text_color"
+            />
+        <TextView
+            android:id="@+id/things_distance_text"
+            style="@style/TextTheme"
+            android:layout_margin="4dp"
+            android:layout_below="@id/things_location_text"
+            android:layout_toRightOf="@id/things_distance_tv"
+            android:text="500米" />
     </RelativeLayout>
 
     <TextView

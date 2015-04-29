@@ -113,6 +113,42 @@
             android:background="#eeeeee" />
 
         <RelativeLayout
+            android:id="@+id/user_location_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp" >
+
+            <TextView
+                android:id="@+id/user_location_tips"
+                style="@style/TextTheme.tipstheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="地址" />
+
+            <TextView
+                android:id="@+id/user_location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="48dip"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/user_location_tips"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dip"
+                android:paddingTop="8dip"
+                android:text="请点击选择当前地址"
+                android:textSize="17sp" >
+            </TextView>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#eeeeee" />
+
+        <RelativeLayout
             android:id="@+id/user_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,7 +178,7 @@
                 android:hint="请填写手机号码"
                 android:paddingBottom="8dip"
                 android:paddingTop="8dip"
-                android:singleLine="true" 
+                android:singleLine="true"
                 android:textSize="15sp" >
             </com.bishe.view.DeletableEditText>
         </RelativeLayout>

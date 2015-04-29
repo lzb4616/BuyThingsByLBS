@@ -16,6 +16,7 @@ public class Things extends BmobObject {
 	private boolean myFav;
 	private int price;
 	private Location thingsLocation;
+	private String locationName;
 	private BmobRelation relation;
 
 	public int getPrice() {
@@ -95,6 +96,14 @@ public class Things extends BmobObject {
 
 	public void setThingsLocation(Location thingsLocation) {
 		this.thingsLocation = thingsLocation;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
 	@Override

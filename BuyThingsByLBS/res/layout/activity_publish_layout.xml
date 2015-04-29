@@ -50,26 +50,23 @@
                 android:textColorHint="@color/hint_text_color" />
 
             <FrameLayout
-                android:id="@+id/framelayout_publish_userPhoneNum"
+                android:id="@+id/framelayout_publish_location"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@id/edit_publish_commodity_description"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/white_bg" >
 
-                <EditText
-                    android:id="@+id/edit_publish_commodity_user_phoneNum"
+                <TextView
+                    android:id="@+id/tv_publish_commodity_location"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/white_bg"
                     android:gravity="right|center_vertical"
-                    android:hint="联系方式 "
-                    android:imeOptions="flagNoFullscreen"
-                    android:inputType="number"
                     android:maxLength="11"
                     android:paddingRight="15dp"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/hint_text_color"
+                    android:text="请点击添加地址"
                     android:textSize="20sp" />
 
                 <TextView
@@ -77,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:text="联系方式"
+                    android:text="位置"
                     android:textSize="20sp" />
             </FrameLayout>
 
@@ -85,7 +82,7 @@
                 android:id="@+id/framelayout_publish_price"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/framelayout_publish_userPhoneNum" >
+                android:layout_below="@id/framelayout_publish_location" >
 
                 <EditText
                     android:id="@+id/edit_publish_commodity_price"

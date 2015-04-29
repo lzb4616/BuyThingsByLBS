@@ -161,11 +161,21 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		if (user.getAvatar() == null) {
 			LogUtils.i("user", "USER avatar IS NULL");
 		}
-
 		mUserName.setText(entity.getAuthor().getUsername());
 		mContentText.setText(entity.getContent());
-		mThingsDistance.setText("200米");
-		mThingsLocation.setText("广州");
+		if (null!= entity.getAuthor().getLocation()) {
+			double distance = entity.getThingsLocation().distanceInKilometersTo(mUserLogic.getCurrentUser().getLocation());
+			if (distance > 10.0) {
+				mThingsDistance.setText(""+(int)distance+" km");
+			}
+			else {
+				distance *= 1000;
+				mThingsDistance.setText(""+(int)distance+" m");
+			}
+		}else {
+			mThingsDistance.setText("0米");
+		}
+		mThingsLocation.setText(entity.getLocationName());
 		mThingsPhone.setText("" + entity.getAuthor().getPhoneNum());
 		mThingsPrice.setText(String.valueOf(entity.getPrice()));
 		mComment.setText("评论：" + entity.getComment());

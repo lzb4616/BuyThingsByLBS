@@ -48,13 +48,7 @@ public class UserLogic {
 		this.signUpLister = signUpLister;
 	}
 
-	public void singUp(String userName, String passWord, String email) {
-		User user = new User();
-		user.setUsername(userName);
-		user.setPassword(passWord);
-		user.setEmail(email);
-		user.setSex(Constant.SEX_MALE);
-		user.setSignature("来吧，写上的心灵鸡汤");
+	public void singUp(User user) {
 
 		user.signUp(mContext, new SaveListener() {
 

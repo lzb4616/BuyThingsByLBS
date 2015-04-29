@@ -14,6 +14,7 @@ public class User extends BmobUser{
 	private BmobRelation favorite;
 	private BmobRelation buyThing;
 	private Location location;
+	private String userLoactionName;
 	private Long phoneNum;
 	private String sex;
 	
@@ -61,6 +62,12 @@ public class User extends BmobUser{
 		this.buyThing = buyThing;
 	}
 	
+	public String getUserLoactionName() {
+		return userLoactionName;
+	}
+	public void setUserLoactionName(String userLoactionName) {
+		this.userLoactionName = userLoactionName;
+	}
 	@Override
 	public String toString() {
 		return  "User [signature=" + signature + ", avatar=" + avatar

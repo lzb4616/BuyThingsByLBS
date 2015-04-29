@@ -1,5 +1,7 @@
 package com.bishe.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.MenuItem;
 
 import com.bishe.buythingsbylbs.R;
@@ -14,10 +16,12 @@ import com.bishe.ui.fragment.PersonalInfoEditFragment;
  */
 public class PersonalInfoActivity extends BaseHomeActivity {
 
+	private PersonalInfoEditFragment mEditFragment;
+	
 	@Override
 	protected BaseFragment getFragment() {
-		// TODO Auto-generated method stub
-		return new PersonalInfoEditFragment();
+		mEditFragment = new PersonalInfoEditFragment();
+		return mEditFragment;
 	}
 
 	@Override
@@ -33,6 +37,12 @@ public class PersonalInfoActivity extends BaseHomeActivity {
 		}
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		mEditFragment.onActivityResult(requestCode, resultCode, data);
+	}
+	
 	@Override
 	protected void initData() {
 		setActionBar("个人信息", null, true);

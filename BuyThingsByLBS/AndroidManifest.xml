@@ -6,34 +6,77 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
+    <!-- 腾讯定位 sdk 要求的权限  (开始) -->
+    <!-- 通过GPS得到精确位置 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 通过网络得到粗略位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 访问网络. 某些位置信息需要从网络服务器获取 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问WiFi状态. 需要WiFi信息用于网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 修改WiFi状态. 发起WiFi扫描, 需要WiFi信息用于网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 访问网络状态, 检测网络的可用性. 需要网络运营商相关信息用于网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 访问网络的变化, 需要某些信息用于网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- 访问手机当前状态, 需要device id用于网络定位 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 腾讯定位 sdk 要求的权限 (结束) -->
+
+
+    <!-- Demo中使用了腾讯地图 sdk, 腾讯地图 sdk 还要求的以下权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_SINTERNETWIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name="com.bishe.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:logo="@drawable/ic_launcher"
-        android:theme="@style/AppTheme"
-        android:name="com.bishe.MyApplication"
-        
-         >
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="537BZ-2BEH3-22T3W-3QUY4-P4OY2-NNBVM" />
+
         <activity
             android:name="com.bishe.ui.activity.MainActivity"
             android:icon="@drawable/ic_launcher"
-            android:launchMode="singleTask"
             android:label="@string/app_name"
-             >
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.bishe.ui.activity.TestActivity"></activity>
-        <activity android:name="com.bishe.ui.activity.LoginAndRegisterActivity" android:launchMode="singleTask"></activity>
-        <activity android:launchMode="singleTask" android:name="com.bishe.ui.activity.PublishThingsActivity"></activity>
-        <activity android:name="com.bishe.ui.activity.ThingsDetailActivity" android:launchMode="singleTask"></activity>
-        <activity android:launchMode="singleTask" android:name="com.bishe.ui.activity.PersonalInfoActivity"></activity>
-        <activity android:launchMode="singleTask" android:name="com.bishe.ui.activity.PersonalThingsActivity"></activity>
+        <activity android:name="com.bishe.ui.activity.TestActivity" >
+        </activity>
+        <activity
+            android:name="com.bishe.ui.activity.LoginAndRegisterActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.bishe.ui.activity.PublishThingsActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.bishe.ui.activity.ThingsDetailActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.bishe.ui.activity.PersonalInfoActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.bishe.ui.activity.PersonalThingsActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity android:launchMode="standard" android:name="com.bishe.ui.activity.MyLoactionActivity"></activity>
     </application>
 
 </manifest>
