@@ -6,6 +6,7 @@
 
 package com.bishe;
 import java.io.File;
+import java.util.List;
 
 import com.bishe.model.Things;
 import com.bishe.utils.ActivityManagerUtils;
@@ -31,6 +32,7 @@ public class MyApplication extends Application {
 	
 	private Things currentThings = null;
 	
+	private List<Things> showLocationThings = null;
 	
 	public static MyApplication getInstance(){
 		return mMyApplication;
@@ -88,5 +90,13 @@ public class MyApplication extends Application {
 
 	public void setCurrentThings(Things currentThings) {
 		this.currentThings = currentThings;
+	}
+
+	public List<Things> getShowLocationThings() {
+		return showLocationThings;
+	}
+
+	public void setShowLocationThings(List<Things> showLocationThings) {
+		this.showLocationThings = showLocationThings;
 	}
 }

@@ -82,7 +82,8 @@ public class MainActivity extends BaseHomeActivity {
 			invalidateOptionsMenu();
 			break;
 		case R.id.action_location:
-			redictToActivity(mContext, MyLoactionActivity.class, null);
+			mActivityListener.onshowThingsLocation();
+			break;
 		case android.R.id.home:
 			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
 			break;
@@ -140,6 +141,7 @@ public class MainActivity extends BaseHomeActivity {
 
 	public interface OnMainActivityListener{
 		void onRestartActivity();
+		void onshowThingsLocation();
 	}
 	private OnMainActivityListener mActivityListener;
 	public void setOnMainActivityListener(OnMainActivityListener activityListener)

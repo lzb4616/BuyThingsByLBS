@@ -58,6 +58,12 @@ public class LocationUtils {
 		return ge;
 	}
 
+	public static GeoPoint ofBmobLocation(com.bishe.model.Location location) {
+		GeoPoint ge = new GeoPoint((int) (location.getLatitude() * 1E6),
+				(int) (location.getLongitude() * 1E6));
+		return ge;
+	}
+
 	public static GeoPoint of(double latitude, double longitude) {
 		GeoPoint ge = new GeoPoint((int) (latitude * 1E6),
 				(int) (longitude * 1E6));

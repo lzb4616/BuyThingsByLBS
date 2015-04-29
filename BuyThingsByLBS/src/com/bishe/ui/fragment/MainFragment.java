@@ -41,8 +41,11 @@ import com.bishe.pulltorefresh.library.PullToRefreshListView;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
 import com.bishe.ui.activity.MainActivity;
 import com.bishe.ui.activity.ThingsDetailActivity;
+import com.bishe.ui.activity.ThingsLoactionActivity;
 import com.bishe.ui.activity.MainActivity.OnMainActivityListener;
+import com.bishe.ui.base.BaseActivity;
 import com.bishe.ui.base.BaseFragment;
+import com.bishe.ui.base.BaseHomeActivity;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
@@ -302,6 +305,17 @@ public class MainFragment extends BaseHomeFragment implements OnGetMyFavoutiteLi
 		pageNum = 0;
 		lastItemTime = getCurrentTime();
 		getMyFavourite();		
+	}
+
+	@Override
+	public void onshowThingsLocation() {
+		if (mListItems.size()>0) {
+			MyApplication.getInstance().setShowLocationThings(mListItems);
+			Intent intent = new Intent(mContext, ThingsLoactionActivity.class);
+			startActivity(intent);
+		}else {
+			ActivityUtils.toastShowBottom(mContext, "数据列表为空，请添加数据！");
+		}
 	}
 
 }

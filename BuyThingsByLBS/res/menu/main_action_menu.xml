@@ -5,7 +5,7 @@
 
      <item
         android:id="@+id/action_location"
-        android:icon="@drawable/add_lbs"
+        android:icon="@drawable/add_lbs_default"
         android:showAsAction="always"
         android:title="@string/action_location"/>
     <item
