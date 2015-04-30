@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
       <item
         android:id="@+id/action_things_publish"
-        android:icon="@drawable/btn_things_publish"
+        android:icon="@drawable/ic_checkbox_marked_circle_outline"
         android:showAsAction="always"
         android:title="@string/action_ablout"/>
 

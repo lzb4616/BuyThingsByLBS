@@ -5,38 +5,41 @@
 
      <item
         android:id="@+id/action_location"
-        android:icon="@drawable/add_lbs_default"
+        android:icon="@drawable/ic_map_marker_radius"
         android:showAsAction="always"
         android:title="@string/action_location"/>
     <item
         android:id="@+id/action_publish"
-        android:icon="@drawable/actionbar_add_icon"
+        android:icon="@drawable/ic_plus"
         android:showAsAction="always"
         android:title="@string/action_plus"/>
     <item
         android:id="@+id/action_main"
-        android:icon="@drawable/action_item_main"
+        android:icon="@drawable/ic_briefcase"
         android:title="@string/action_main"/>
     <item
         android:id="@+id/action_collection"
-        android:icon="@drawable/ofm_collect_icon"
+        android:icon="@drawable/ic_cube_outline"
         android:title="@string/action_collection"/>
     <item 
         android:id="@+id/action_hadBuy"
+        android:icon="@drawable/ic_clipboard_check"
         android:title="@string/action_hadbuy" 
         />
     <item
         android:id="@+id/action_my_info"
-        android:icon="@drawable/navigationbar_me_2x"
+        android:icon="@drawable/ic_account"
         android:title="@string/action_my_info"/>
      <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/ofm_setting_icon"
+        android:icon="@drawable/ic_settings"
         android:title="@string/action_settings"/>
          <item
         android:id="@+id/action_login"
+        android:icon="@drawable/ic_login"
         android:title="@string/action_login"/>
     <item
         android:id="@+id/action_login_out"
+        android:icon="@drawable/ic_logout"
         android:title="@string/action_loginOut"/>
 </menu>
