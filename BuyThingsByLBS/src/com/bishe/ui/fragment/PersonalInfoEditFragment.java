@@ -214,7 +214,7 @@ public class PersonalInfoEditFragment extends BaseHomeFragment implements
 			break;
 		case R.id.user_location_rl:
 			Intent intent = new Intent(mContext, MyLoactionActivity.class);
-			mContext.startActivityForResult(intent, Constant.GET_LOCATION);
+			startActivityForResult(intent, Constant.GET_LOCATION);
 		default:
 			break;
 		}
