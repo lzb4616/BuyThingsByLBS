@@ -3,7 +3,7 @@
     <string name="app_name">BuyThingsByLBS</string>
     <string name="action_plus">添加</string>
     <string name="action_collection">我的收藏</string>
-    <string name="action_settings">设置</string>
+    <string name="action_clearcache">清除缓存</string>
     <string name="action_ablout">关于</string>
     <string name="action_main">主页</string>
     <string name="action_my_info">我的信息</string>

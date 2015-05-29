@@ -1,6 +1,5 @@
 package com.bishe.ui.activity;
 
-import A.i;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 
 import com.bishe.buythingsbylbs.R;
 import com.bishe.model.Location;
-import com.bishe.model.Things;
 import com.bishe.utils.LocationUtils;
 
 import com.tencent.map.geolocation.TencentLocation;

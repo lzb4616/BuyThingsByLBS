@@ -27,7 +27,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import cn.bmob.v3.BmobUser;
 
 import com.bishe.MyApplication;
 import com.bishe.adapter.CommentAdapter;
@@ -55,6 +54,7 @@ import com.bishe.ui.base.BaseFragment;
 import com.bishe.ui.base.BaseHomeFragment;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
+import com.bishe.utils.ShareUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -247,11 +247,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 			public void onClick(View v) {
 				// share to sociaty
 				ActivityUtils.toastShowBottom((Activity) mContext, "分享给好友看哦~");
-				// TODO Auto-generated method stub
-				// final TencentShare tencentShare=new
-				// TencentShare(MyApplication.getInstance().getTopActivity(),
-				// getQQShareEntity(entity));
-				// tencentShare.shareToQQ();
+				ShareUtils.shareThings(getActivity(), entity);
 			}
 		});
 
@@ -264,7 +260,6 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 
 			@Override
 			public void onClick(View v) {
-				// 收藏
 				ActivityUtils.toastShowBottom((Activity) mContext, "收藏");
 				onClickFav(v, entity);
 			}

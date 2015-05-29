@@ -2,7 +2,6 @@ package com.bishe.ui.fragment;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,7 @@ public class LoginFragment extends BaseFragment implements ILoginListener,OnClic
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+			 ViewGroup container,  Bundle savedInstanceState) {
 
 		View contentView = inflater.inflate(R.layout.fragment_login_register,
 				container, false);

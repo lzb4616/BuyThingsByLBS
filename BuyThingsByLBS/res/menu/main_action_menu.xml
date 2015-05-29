@@ -31,9 +31,9 @@
         android:icon="@drawable/ic_account"
         android:title="@string/action_my_info"/>
      <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_clearcache"
         android:icon="@drawable/ic_settings"
-        android:title="@string/action_settings"/>
+        android:title="@string/action_clearcache"/>
          <item
         android:id="@+id/action_login"
         android:icon="@drawable/ic_login"

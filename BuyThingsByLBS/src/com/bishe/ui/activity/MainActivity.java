@@ -16,6 +16,7 @@ import com.bishe.ui.fragment.MyFavouriteFragment;
 import com.bishe.ui.fragment.MainFragment.RefreshType;
 import com.bishe.utils.ActivityUtils;
 import com.bishe.utils.LogUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author robin
@@ -86,6 +87,10 @@ public class MainActivity extends BaseHomeActivity {
 			break;
 		case android.R.id.home:
 			mSelectFragment = SelectFragmentType.MAINFRAGMENT;
+			break;
+		case R.id.action_clearcache:
+			ImageLoader.getInstance().clearDiscCache();
+			ActivityUtils.toastShowBottom(this, "清除缓存完毕");
 			break;
 		}
 		initFragment();

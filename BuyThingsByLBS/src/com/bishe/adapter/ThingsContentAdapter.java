@@ -6,21 +6,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
-import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.social.share.core.BMShareListener;
+import cn.bmob.social.share.core.ErrorInfo;
+import cn.bmob.social.share.core.data.BMPlatform;
+import cn.bmob.social.share.core.data.ShareData;
+import cn.bmob.social.share.view.BMShare;
 
 import com.bishe.MyApplication;
 import com.bishe.buythingsbylbs.R;
@@ -30,12 +32,11 @@ import com.bishe.logic.UserLogic.OnCollectMyFavouriteListener;
 import com.bishe.model.Things;
 import com.bishe.model.User;
 import com.bishe.ui.activity.LoginAndRegisterActivity;
-import com.bishe.ui.activity.PersonalInfoActivity;
 import com.bishe.ui.activity.PersonalThingsActivity;
 import com.bishe.ui.activity.ThingsDetailActivity;
 import com.bishe.utils.ActivityUtils;
-import com.bishe.utils.BitmapUtils;
 import com.bishe.utils.LogUtils;
+import com.bishe.utils.ShareUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -191,13 +192,8 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 
 			@Override
 			public void onClick(View v) {
-				// share to sociaty
 				ActivityUtils.toastShowBottom((Activity) mContext, "分享给好友看哦~");
-				// TODO Auto-generated method stub
-				// final TencentShare tencentShare=new
-				// TencentShare(MyApplication.getInstance().getTopActivity(),
-				// getQQShareEntity(entity));
-				// tencentShare.shareToQQ();
+				ShareUtils.shareThings(mContext,entity);
 			}
 		});
 		viewHolder.comment.setOnClickListener(new OnClickListener() {

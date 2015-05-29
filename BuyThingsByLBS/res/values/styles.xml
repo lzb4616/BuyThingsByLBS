@@ -88,4 +88,8 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+     <style name="YtSharePopupAnim">
+        <item name="android:windowEnterAnimation">@anim/sharepopup_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/sharepopup_fade_out</item>
+    </style>
 </resources>
