@@ -28,7 +28,8 @@ public class LoginFragment extends BaseFragment implements ILoginListener,OnClic
 	DeletableEditText mUserNameInput;
 	DeletableEditText mUserPasswordInput;
 	DeletableEditText mUserEmailInput;
-
+	DeletableEditText mUserLocationInput;
+	
 	Button mRegisterBtn;
 	SmoothProgressBar mProgressbar;
 
@@ -55,8 +56,10 @@ public class LoginFragment extends BaseFragment implements ILoginListener,OnClic
 				.findViewById(R.id.user_password_input);
 		mUserEmailInput = (DeletableEditText) view
 				.findViewById(R.id.user_email_input);
-
+		mUserLocationInput = (DeletableEditText) view.findViewById(R.id.user_location_input);
+		
 		mUserEmailInput.setVisibility(View.GONE);
+		mUserLocationInput.setVisibility(View.GONE);
 		mRegisterBtn = (Button) view.findViewById(R.id.register_btn);
 		mRegisterBtn.setText("登录");
 		mRegisterBtn.setOnClickListener(this);
