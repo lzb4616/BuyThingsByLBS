@@ -2,6 +2,8 @@ package com.bishe.ui.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -262,7 +264,11 @@ public class PublishThingsActivity extends BasePageActivity implements
 		things.setContent(thingsDescription);
 		things.setPrice(Integer.valueOf(price));
 		if (image != null) {
-			things.setThingsImage(image);
+			List<ThingsImage> images = new ArrayList<ThingsImage>();
+			images.add(image);
+			images.add(image);
+			things.setThingsImages(images);
+			//things.setThingsImage(image);
 		}
 		if (null != mLocation) {
 			things.setThingsLocation(mLocation);

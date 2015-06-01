@@ -1,7 +1,8 @@
 package com.bishe.view;
 
+
 import com.bishe.buythingsbylbs.R;
-import com.bishe.config.DeviceSize;
+import com.bishe.utils.ActivityUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -41,11 +42,11 @@ public class CommodtiyImageGridItem extends RelativeLayout implements Checkable 
 		mBadgeView.setTextSize(16);
 		mBadgeView.toggle(true);
 
-		DeviceSize ds = new DeviceSize(mContext);
+		int[] screenSize = ActivityUtils.getScreenSize();
 		FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mImageView
 				.getLayoutParams(); // 取控件mGrid当前的布局参数
-		layoutParams.width = ds.getmWidth() / 3;
-		layoutParams.height = ds.getmWidth() / 3;
+		layoutParams.width = screenSize[0] / 3;
+		layoutParams.height = screenSize[0] / 3;
 		mImageView.setLayoutParams(layoutParams);
 	}
 

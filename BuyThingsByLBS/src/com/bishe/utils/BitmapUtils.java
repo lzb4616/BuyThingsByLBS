@@ -1,6 +1,14 @@
 package com.bishe.utils;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
 import android.graphics.Bitmap;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -53,4 +61,28 @@ public class BitmapUtils {
 			return 1;
 		}
 	}
+	
+	 //获取图片所在文件夹名称
+    public static String getDir(String path)
+    {
+        String subString = path.substring(0, path.lastIndexOf('/'));
+        return subString.substring(subString.lastIndexOf('/') + 1, subString.length());
+    }
+
+    public static class AnimateFirstDisplayListener extends SimpleImageLoadingListener
+    {
+        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+        @Override
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            if (loadedImage != null) {
+                ImageView imageView = (ImageView) view;
+                boolean firstDisplay = !displayedImages.contains(imageUri);
+                if (firstDisplay) {
+                    FadeInBitmapDisplayer.animate(imageView, 500);
+                    displayedImages.add(imageUri);
+                }
+            }
+        }
+    }
+
 }

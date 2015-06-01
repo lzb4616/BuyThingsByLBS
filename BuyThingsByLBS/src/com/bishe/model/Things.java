@@ -1,5 +1,7 @@
 package com.bishe.model;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobRelation;
 
@@ -10,6 +12,7 @@ public class Things extends BmobObject {
 	private User author;
 	private String content;
 	private ThingsImage thingsImage;
+	private List<ThingsImage> thingsImages;
 	private int share;
 	private int comment;
 	private boolean isBuy;
@@ -104,6 +107,14 @@ public class Things extends BmobObject {
 
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}
+
+	public List<ThingsImage> getThingsImages() {
+		return thingsImages;
+	}
+
+	public void setThingsImages(List<ThingsImage> thingsImages) {
+		this.thingsImages = thingsImages;
 	}
 
 	@Override
