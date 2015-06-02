@@ -1,5 +1,7 @@
 package com.bishe.ui.activity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,9 +11,14 @@ import com.bishe.adapter.ZoomDetailImagePagerAdapter;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.model.NativeImageAlbum;
 import com.bishe.model.NativeImageItem;
+import com.bishe.ui.base.BasePageActivity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.ViewConfiguration;
+import android.view.Window;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -20,14 +27,12 @@ import android.widget.CheckBox;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 
-import android.app.Activity;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.os.Bundle;
 
-public class PreviewImageActivity extends Activity {
+public class PreviewImageActivity extends BasePageActivity {
 
-	protected Context mContext;
-
-	
 	protected RelativeLayout mRlImageSelect;
 	protected TextView mTvSelectImage;
 	protected CheckBox mChkSelectCommodityImage;
@@ -38,36 +43,97 @@ public class PreviewImageActivity extends Activity {
 	private NativeImageAlbum mImageAlbum;
 	private int mPosition;
 	private List<NativeImageItem> mImageItems = new ArrayList<NativeImageItem>();
+	private MenuItem mShowImgaeNumItem;
 
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void setLayoutView() {
 		setContentView(R.layout.activity_preview_native_image_layout);
-		getDatdFromOthersActivity();
-		initViews();
+		setOverflowShowingAlways();
+		getDatdFromOthersActivity();		
 	}
 
-	private void initViews() {
-		mContext = this;
-	
+	@Override
+	protected void findViews() {
 		
 		mRlImageSelect = (RelativeLayout) findViewById(R.id.rl_image_select);
 		mTvSelectImage = (TextView) findViewById(R.id.tv_select_image);
 		mChkSelectCommodityImage = (CheckBox) findViewById(R.id.chk_select_commodity_image);
 		mVpPriviewNativeImage = (android.support.v4.view.ViewPager) findViewById(R.id.vp_priview_native_image);
 
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 //		mTvPublishNavigationbarTitle.setText((mPosition + 1) + " / "
 //				+ mImageAlbum.getBitList().size());
 
-		mVpPriviewNativeImage.setOnPageChangeListener(mOnPageChangeListener);
+	}
+
+	@Override
+	protected void setupViews(Bundle bundle) {
 		mPagerAdapter = new ZoomDetailImagePagerAdapter(mContext, mImageAlbum);
 		mVpPriviewNativeImage.setAdapter(mPagerAdapter);
 		mVpPriviewNativeImage.setCurrentItem(mPosition);
-		mVpPriviewNativeImage.setEnabled(false);
+		mVpPriviewNativeImage.setEnabled(false);		
+	}
 
-
+	@Override
+	protected void setListener() {
+		mVpPriviewNativeImage.setOnPageChangeListener(mOnPageChangeListener);
 		mChkSelectCommodityImage
-				.setOnCheckedChangeListener(mCheckedChangeListener);
+				.setOnCheckedChangeListener(mCheckedChangeListener);		
+	}
+
+	@Override
+	protected void fetchData() {
+		
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.image_show_menu, menu);
+		mShowImgaeNumItem = menu.findItem(R.id.action_show_imagenum);
+		mShowImgaeNumItem.setTitle((mPosition + 1) + " / "
+				+ mImageAlbum.getBitList().size());
+		return true;
+	}
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+				try {
+					Method m = menu.getClass().getDeclaredMethod(
+							"setOptionalIconsVisible", Boolean.TYPE);
+					m.setAccessible(true);
+					m.invoke(menu, true);
+				} catch (Exception e) {
+				}
+			}
+		}
+		return super.onMenuOpened(featureId, menu);
+	}
+
+	private void setOverflowShowingAlways() {
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			menuKeyField.setAccessible(true);
+			menuKeyField.setBoolean(config, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			sendSelectAlbumToOtherActivity(NativeImageActivity.class);
+			break;
+		case R.id.action_things_publish:
+			sendSelectAlbumToOtherActivity(PublishThingsActivity.class);
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
 	}
 
 	private OnCheckedChangeListener mCheckedChangeListener = new OnCheckedChangeListener() {
@@ -100,18 +166,6 @@ public class PreviewImageActivity extends Activity {
 		}
 		if (!isSeclect) {str.setSelecNum(0);}
 	}
-
-//	protected View.OnClickListener mOnBtnClickListener = new View.OnClickListener() {
-//		@Override
-//		public void onClick(View v) {
-//			int viewId = v.getId();
-//			if (viewId == R.id.ib_publish_navigationbar_left) {
-//				sendSelectAlbumToOtherActivity(NativeImageActivity.class);
-//			} else if (viewId == R.id.ib_publish_navigationbar_right) {
-//				sendSelectAlbumToOtherActivity(PublishCommodityActivity.class);
-//			}
-//		}
-//	};
 
 	private void sendSelectAlbumToOtherActivity(Class<?> cls) {
 		Intent intent = new Intent(mContext, cls);
@@ -146,10 +200,12 @@ public class PreviewImageActivity extends Activity {
 		@Override
 		public void onPageSelected(int arg0) {
 			mPosition = arg0;
+			mShowImgaeNumItem.setTitle((arg0 + 1) + "/"
+					+ mImageAlbum.getBitList().size());
 //			mTvPublishNavigationbarTitle.setText((arg0 + 1) + "/"
 //					+ mImageAlbum.getBitList().size());
-//			mChkSelectCommodityImage.setChecked(mImageAlbum.getBitList()
-//					.get(arg0).isSelect());
+			mChkSelectCommodityImage.setChecked(mImageAlbum.getBitList()
+					.get(arg0).isSelect());
 		}
 
 		@Override
@@ -184,4 +240,5 @@ public class PreviewImageActivity extends Activity {
 			return 0;
 		}
 	}
+
 }

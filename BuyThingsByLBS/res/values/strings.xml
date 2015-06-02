@@ -19,5 +19,6 @@
     <string name="action_cancel_buy">取消购买</string>
     <string name="my_location">我的位置</string>
     <string name="action_location">定位</string>
+    <string name="action_show_imagenum">0/0</string>
 </resources>
                                          

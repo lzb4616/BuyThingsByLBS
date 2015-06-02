@@ -34,7 +34,9 @@ public class ImageAsynTask extends AsyncTask<Integer, Void, Bitmap> {
 				mContext.getContentResolver(),
 				mImageId,
 				Thumbnails.MICRO_KIND, null);
-		mBitmapCache.put(mImageId,bitmap);
+		if (null != bitmap) {
+			mBitmapCache.put(mImageId,bitmap);
+		}
 		return bitmap;
 	}
 

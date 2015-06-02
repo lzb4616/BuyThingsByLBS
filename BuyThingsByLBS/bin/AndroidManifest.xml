@@ -146,6 +146,10 @@
             android:name="cn.bmob.social.share.core.login.AuthActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.bishe.ui.activity.PreviewImageActivity"></activity>
+        <activity android:name="com.bishe.ui.activity.NativeImageActivity"></activity>
+        <activity android:name="com.bishe.ui.activity.ShowBigImageActivity"></activity>
+        
 
     </application>
 

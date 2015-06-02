@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="65dip"
             android:layout_alignParentBottom="true"
-            android:background="#292929"
+            android:background="@color/actionbar_background_color"
             android:gravity="center_vertical" >
 
             <Button
@@ -40,24 +40,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dip"
-                android:background="@drawable/ssp_queding_btn"
+                android:background="@drawable/actionbar_bg_selector"
                 android:gravity="center"
                 android:text="所有照片"
                 android:textColor="#f4f4f4"
                 android:textSize="13sp" />
 
-            <Button
-                android:id="@+id/btn_sure"
-                android:layout_width="60dip"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dip"
-                android:background="@drawable/ssp_queding_btn"
-                android:gravity="center"
-                android:text="确定"
-                android:textColor="#f4f4f4"
-                android:textSize="13sp" />
         </RelativeLayout>
     </RelativeLayout>
 

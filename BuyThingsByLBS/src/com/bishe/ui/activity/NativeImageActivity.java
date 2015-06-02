@@ -1,23 +1,26 @@
 package com.bishe.ui.activity;
 
-import android.content.Context;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.TextView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.GridView;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,10 +34,11 @@ import com.bishe.buythingsbylbs.R;
 import com.bishe.config.DeviceSize;
 import com.bishe.model.NativeImageAlbum;
 import com.bishe.model.NativeImageItem;
+import com.bishe.ui.base.BasePageActivity;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -42,16 +46,13 @@ import android.provider.MediaStore;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class NativeImageActivity extends Activity {
+public class NativeImageActivity extends BasePageActivity{
 	public static final String TAG = "NativeImageActivity";
 
 	private GridView mGvNativeImage;
-	private Context mContext;
-	
 	
 	private RelativeLayout mRlBottom;
 	private Button mBtnShowImage;
-	private Button mBtnSure;
 	protected ListView mLvImageAlbum;
 
 	private ArrayList<NativeImageItem> mImageItems = new ArrayList<NativeImageItem>();
@@ -61,6 +62,8 @@ public class NativeImageActivity extends Activity {
 	private DeviceSize mDeviceSize;
 	private List<NativeImageAlbum> mAlbumList;
 
+	private MenuItem mSureSelectItem;
+	
 	// 设置获取图片的字段信息
 	private static final String[] STORE_IMAGES = {
 			MediaStore.Images.Media.DISPLAY_NAME, // 显示的名字
@@ -73,23 +76,18 @@ public class NativeImageActivity extends Activity {
 	};
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void setLayoutView() {
 		setContentView(R.layout.activity_native_image_gridview);
-		initViews();
-		getIntentFromOthers();
+		setOverflowShowingAlways();
 	}
 
-	private void initViews() {
-		mContext = this.getApplicationContext();
-		
+	@Override
+	protected void findViews() {
 		mGvNativeImage = (GridView) findViewById(R.id.gv_native_image);
 		mRlBottom = (RelativeLayout) findViewById(R.id.rl_bottom);
 		mBtnShowImage = (Button) findViewById(R.id.btn_show_image);
-		mBtnSure = (Button) findViewById(R.id.btn_sure);
 
 		mBtnShowImage.setOnClickListener(mOnBtnClickListener);
-		mBtnSure.setOnClickListener(mOnBtnClickListener);
 
 		mDeviceSize = new DeviceSize(mContext);
 		LayoutInflater inflater = LayoutInflater.from(this);
@@ -99,6 +97,26 @@ public class NativeImageActivity extends Activity {
 				(int) (mDeviceSize.getmHeight() * 0.7), true);
 		popupWindow.setOutsideTouchable(true);
 		popupWindow.setAnimationStyle(R.style.popupwindow_animation_style);
+
+		mLvImageAlbum = (ListView) view.findViewById(R.id.lv_image_album);
+		mAlbumList = getPhotoAlbum();
+		mLvImageAlbum.setAdapter(new NativeImageAlbumListViewAdapter(
+				mAlbumList, this));
+
+		mAlbum = mAlbumList.get(0);
+		mNativeImaegAdapter = new NativeImageGridViewAdapter(this, mAlbum);
+		mGvNativeImage.setAdapter(mNativeImaegAdapter);
+
+	}
+
+	@Override
+	protected void setupViews(Bundle bundle) {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);		
+	}
+
+	@Override
+	protected void setListener() {
 		popupWindow.setOnDismissListener(new OnDismissListener() {
 			@SuppressLint("NewApi")
 			@Override
@@ -116,21 +134,14 @@ public class NativeImageActivity extends Activity {
 				popupWindow.dismiss();
 				return true;
 			}
-		});
-		mLvImageAlbum = (ListView) view.findViewById(R.id.lv_image_album);
-		mAlbumList = getPhotoAlbum();
-		mLvImageAlbum.setAdapter(new NativeImageAlbumListViewAdapter(
-				mAlbumList, this));
+		});		
 		mLvImageAlbum.setOnItemClickListener(albumClickListener);
-
-		mAlbum = mAlbumList.get(0);
-		mNativeImaegAdapter = new NativeImageGridViewAdapter(this, mAlbum);
-		mGvNativeImage.setAdapter(mNativeImaegAdapter);
 		mGvNativeImage.setOnItemClickListener(gvItemClickListener);
 		mGvNativeImage.setOnItemLongClickListener(gvOnItemLongClickListener);
 	}
 
-	private void getIntentFromOthers() {
+	@Override
+	protected void fetchData() {
 		Bundle bundle = getIntent().getExtras();
 		if (bundle == null)
 			return;
@@ -151,38 +162,72 @@ public class NativeImageActivity extends Activity {
 				}
 			}
 		}
-		mImageItems = (ArrayList<NativeImageItem>) album.getBitList();
+		mImageItems = (ArrayList<NativeImageItem>) album.getBitList();		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.publish_action_menu, menu);
+		mSureSelectItem = menu.findItem(R.id.action_things_publish);
+		return true;
+	}
+	
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+				try {
+					Method m = menu.getClass().getDeclaredMethod(
+							"setOptionalIconsVisible", Boolean.TYPE);
+					m.setAccessible(true);
+					m.invoke(menu, true);
+				} catch (Exception e) {
+				}
+			}
+		}
+		return super.onMenuOpened(featureId, menu);
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		case R.id.action_things_publish:
+			Intent intent = new Intent(NativeImageActivity.this,
+			PublishThingsActivity.class);
+			Bundle bundle = new Bundle();
+			NativeImageAlbum album = new NativeImageAlbum();
+			album.setBitList(mImageItems);
+			bundle.putSerializable("mAblum", album);
+			intent.putExtras(bundle);
+			startActivity(intent);
+			finish();
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	private void setOverflowShowingAlways() {
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			menuKeyField.setAccessible(true);
+			menuKeyField.setBoolean(config, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected View.OnClickListener mOnBtnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-//			int viewId = v.getId();
-//			if (viewId == R.id.ib_publish_navigationbar_left) {
-//				finish();
-//			} else if (viewId == R.id.ib_publish_navigationbar_right) {
-//				Intent intent = new Intent(NativeImageActivity.this,
-//						PublishCommodityActivity.class);
-//				Bundle bundle = new Bundle();
-//				NativeImageAlbum album = new NativeImageAlbum();
-//				album.setBitList(mImageItems);
-//				bundle.putSerializable("mAblum", album);
-//				intent.putExtras(bundle);
-//				startActivity(intent);
-//				finish();
-//			} else if (viewId == R.id.btn_show_image) {
-//				popwindowTOShowOrHide(v);
-//			} else if (viewId == R.id.btn_sure) {
-//				Intent intent = new Intent(NativeImageActivity.this,
-//						PublishCommodityActivity.class);
-//				Bundle bundle = new Bundle();
-//				NativeImageAlbum album = new NativeImageAlbum();
-//				album.setBitList(mImageItems);
-//				bundle.putSerializable("mAblum", album);
-//				intent.putExtras(bundle);
-//				startActivity(intent);
-//				finish();
-//			}
+			int viewId = v.getId();
+			if (viewId == R.id.btn_show_image) {
+				popwindowTOShowOrHide(v);
+			} 
 		}
 	};
 
@@ -223,9 +268,9 @@ public class NativeImageActivity extends Activity {
 			mImageItems.get(i).setSelecNum(i + 1);
 		}
 		if (isSeclect) {
-			mBtnSure.setText("确定(" + mImageItems.size() + ")");
+			mSureSelectItem.setTitle( mImageItems.size() + ")");
 		} else {
-			mBtnSure.setText("确定(" + mImageItems.size() + ")");
+			mSureSelectItem.setTitle( mImageItems.size() + ")");
 			str.setSelecNum(0);
 		}
 	}
@@ -378,3 +423,4 @@ public class NativeImageActivity extends Activity {
 		}
 	}
 }
+

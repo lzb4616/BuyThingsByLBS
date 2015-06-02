@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout_publish"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_grary_background" >
@@ -14,8 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <!--
-                <com.bishe.view.CommodityPhotoGridView
+            <com.bishe.view.CommodityPhotoGridView
                 android:id="@+id/gv_publish_commodityimage_show"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -25,8 +25,8 @@
                 android:scaleType="fitXY"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="1dp" />
-            -->
 
+           <!--
             <ImageView
                 android:id="@+id/gv_publish_commodityimage_show"
                 android:layout_width="200dp"
@@ -36,6 +36,7 @@
                 android:layout_margin="10dp"
                 android:layout_centerHorizontal="true"
                  />
+            -->
 
             <EditText
                 android:id="@+id/edit_publish_commodity_description"
@@ -65,8 +66,8 @@
                     android:gravity="right|center_vertical"
                     android:maxLength="11"
                     android:paddingRight="15dp"
-                    android:textColor="@color/black"
                     android:text="请点击添加地址"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
                 <TextView

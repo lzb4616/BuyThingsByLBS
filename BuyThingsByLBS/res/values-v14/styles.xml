@@ -5,6 +5,7 @@
         <item name="android:itemBackground">@color/actionbar_background_color</item>
         <item name="android:actionBarItemBackground">@color/actionbar_background_color</item>
         <item name="android:itemTextAppearance">@style/WeChatActionBarOverflow</item>
+        <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/WeChatActionButtonOverflow</item>
     </style>
 
@@ -25,6 +26,9 @@
 
     <style name="WeChatActionButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_dots_vertical</item>
+        
     </style>
-
+ 	    <style name="MenuTextStyle">
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

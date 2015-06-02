@@ -161,7 +161,7 @@ public class RegisterFragment extends BaseFragment implements ISignUpListener, O
 	public void onSignUpFailure(String msg) {
 		dimissProgressbar();
 		ActivityUtils.toastShowBottom(mContext, "注册失败。请确认网络连接后再重试。");
-		LogUtils.i(TAG,"register failed！");
+		LogUtils.i(TAG,"register failed！"+msg);
 	}
 
 }

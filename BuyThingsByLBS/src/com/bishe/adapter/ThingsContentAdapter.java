@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,8 +76,8 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 					.findViewById(R.id.item_action_fav);
 			viewHolder.contentText = (TextView) convertView
 					.findViewById(R.id.content_text);
-			viewHolder.contentImage = (ImageView) convertView
-					.findViewById(R.id.content_image);
+			viewHolder.contentImage = (GridView) convertView
+					.findViewById(R.id.gv_content_image_show);
 			viewHolder.thingsDistance = (TextView) convertView
 					.findViewById(R.id.things_distance_text);
 			viewHolder.thingsLocation = (TextView) convertView
@@ -166,26 +167,11 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 			}
 		});
 
-		if (null == entity.getThingsImage()) {
+		if (null == entity.getThingsImages()) {
 			viewHolder.contentImage.setVisibility(View.GONE);
 		} else {
 			viewHolder.contentImage.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(
-					entity.getThingsImage().getFileUrl(mContext) == null ? ""
-							: entity.getThingsImage().getFileUrl(mContext),
-					viewHolder.contentImage,
-					MyApplication.getInstance().getOptions(
-							R.drawable.bg_pic_loading),
-					new SimpleImageLoadingListener() {
-
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							LogUtils.i(TAG, "加载图片" + imageUri + "成功");
-						}
-
-					});
+			viewHolder.contentImage.setAdapter(new MainThingsGridViewAdapter(mContext, entity.getThingsImages()));
 		}
 
 		viewHolder.share.setOnClickListener(new OnClickListener() {
@@ -243,6 +229,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		} else {
 			((ImageView) v).setImageResource(R.drawable.ic_action_fav_normal);
 		}
+		things.setMyFav(mIsCollect);
 		mUserLogic.collectMyFav(things, mIsCollect);
 	}
 
@@ -283,7 +270,7 @@ public class ThingsContentAdapter extends BaseContentAdapter<Things> implements
 		public ImageView userLogo;
 		public TextView userName;
 		public TextView contentText;
-		public ImageView contentImage;
+		public GridView contentImage;
 		public TextView thingsDistance;
 		public TextView thingsLocation;
 		public TextView thingsPrice;

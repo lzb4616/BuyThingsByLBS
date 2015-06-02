@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 
 import com.bishe.MyApplication;
 import com.bishe.adapter.CommentAdapter;
+import com.bishe.adapter.MainThingsGridViewAdapter;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
 import com.bishe.logic.CommentLogic;
@@ -70,7 +72,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 	private ImageView mUserLogo;
 	private TextView mUserName;
 	private TextView mContentText;
-	private ImageView mContentImage;
+	private GridView mContentImage;
 	private TextView mThingsDistance;
 	private TextView mThingsLocation;
 	private TextView mThingsPrice;
@@ -115,7 +117,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		mUserLogo = (ImageView) view.findViewById(R.id.user_logo);
 		mFavMark = (ImageView) view.findViewById(R.id.item_action_fav);
 		mContentText = (TextView) view.findViewById(R.id.content_text);
-		mContentImage = (ImageView) view.findViewById(R.id.content_image);
+		mContentImage = (GridView) view.findViewById(R.id.gv_content_image_show);
 		mThingsDistance = (TextView) view
 				.findViewById(R.id.things_distance_text);
 		mThingsLocation = (TextView) view
@@ -137,7 +139,6 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 						| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		mThings = (Things) mContext.getIntent().getSerializableExtra("data");
-
 		mPageNum = 0;
 		mCommentAdapter = new CommentAdapter(mContext, mComments);
 		mCommentList.setAdapter(mCommentAdapter);
@@ -219,26 +220,11 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 			}
 		});
 
-		if (null == entity.getThingsImage()) {
+		if (null == entity.getThingsImages()) {
 			mContentImage.setVisibility(View.GONE);
 		} else {
 			mContentImage.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(
-					entity.getThingsImage().getFileUrl(mContext) == null ? ""
-							: entity.getThingsImage().getFileUrl(mContext),
-					mContentImage,
-					MyApplication.getInstance().getOptions(
-							R.drawable.bg_pic_loading),
-					new SimpleImageLoadingListener() {
-						@Override
-						public void onLoadingComplete(String imageUri,
-								View view, Bitmap loadedImage) {
-							super.onLoadingComplete(imageUri, view, loadedImage);
-							LogUtils.i(TAG, "加载图片" + imageUri + "成功");
-							
-						}
-
-					});
+			mContentImage.setAdapter(new MainThingsGridViewAdapter(mContext, entity.getThingsImages()));
 		}
 
 		mShare.setOnClickListener(new OnClickListener() {
@@ -312,6 +298,7 @@ public class ThingsDetailFragment extends BaseHomeFragment implements
 		} else {
 			((ImageView) v).setImageResource(R.drawable.ic_action_fav_normal);
 		}
+		things.setMyFav(mIsCollect);
 		mUserLogic.collectMyFav(things, mIsCollect);
 	}
 

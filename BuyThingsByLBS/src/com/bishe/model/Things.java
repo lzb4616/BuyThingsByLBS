@@ -11,7 +11,6 @@ public class Things extends BmobObject {
 
 	private User author;
 	private String content;
-	private ThingsImage thingsImage;
 	private List<ThingsImage> thingsImages;
 	private int share;
 	private int comment;
@@ -46,13 +45,6 @@ public class Things extends BmobObject {
 		this.content = content;
 	}
 
-	public ThingsImage getThingsImage() {
-		return thingsImage;
-	}
-
-	public void setThingsImage(ThingsImage thingsImage) {
-		this.thingsImage = thingsImage;
-	}
 
 	public int getShare() {
 		return share;
@@ -120,7 +112,7 @@ public class Things extends BmobObject {
 	@Override
 	public String toString() {
 		return "Things [author=" + author.toString() + ", content=" + content
-				+ ", thingsImage=" + thingsImage + ", price=" + price
+				+ ", thingsImages=" + thingsImages.size() + ", price=" + price
 				+ ", share=" + share + ", comment=" + comment + ", isBuy="
 				+ isBuy + ", myFav=" + myFav + ", relation=" + relation + "]";
 	}

@@ -25,7 +25,7 @@ public class ShareUtils {
 		shareData.setDescription("BuyThingsByLBS分享");
  		shareData.setText(things.getContent());
 		shareData.setTarget_url("http://buythingslbs.bmob.cn/");
-		shareData.setImageUrl(things.getThingsImage().getFileUrl(mContext));
+		shareData.setImageUrl(things.getThingsImages().get(0).getFileUrl(mContext));
 		
 		BMShareListener whiteViewListener = new BMShareListener() {
 

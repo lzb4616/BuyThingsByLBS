@@ -6,24 +6,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Thumbnails;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.bishe.MyApplication;
+import com.bishe.adapter.CommodityImageGridViewAdapter;
+import com.bishe.adapter.MainThingsGridViewAdapter;
 import com.bishe.buythingsbylbs.R;
 import com.bishe.config.Constant;
+import com.bishe.config.DeviceSize;
 import com.bishe.logic.ThingsImageLogic;
 import com.bishe.logic.ThingsImageLogic.IsUploadImageListener;
 import com.bishe.logic.ThingsLogic.IsPublishListener;
@@ -31,6 +47,8 @@ import com.bishe.logic.ThingsLogic;
 import com.bishe.logic.ThingsLogic.IsUpdateListener;
 import com.bishe.logic.UserLogic;
 import com.bishe.model.Location;
+import com.bishe.model.NativeImageAlbum;
+import com.bishe.model.NativeImageItem;
 import com.bishe.model.Things;
 import com.bishe.model.ThingsImage;
 import com.bishe.model.User;
@@ -48,22 +66,29 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 public class PublishThingsActivity extends BasePageActivity implements
 		IsUploadImageListener, IsPublishListener, IsUpdateListener {
 
-	private GridView gvCommodityImage;
+	private GridView mGvCommodityImage;
 	private EditText mEditThingsDdescription;
 	private EditText mEditThingsPrice;
-	private ImageView mImageView;
 	private TextView mThingsPublisherLocationTv;
-	private String mImagePath;
 	private UserLogic mUserLogic;
 	private ThingsLogic mThingsLogic;
 	private ThingsImageLogic mImageLogic;
-	private CreateBmpFactory mBmpFactory;
-
+	private ScrollView mScrollView;
+	
 	private FrameLayout mFrameLayout;
 	private Things mThings;
 	private Location mLocation;
 	private String mLocationName;
 
+	private List<NativeImageItem> mNativeImageItems = new ArrayList<NativeImageItem>();
+	private int keyBoardHeight = 0;
+	private List<String> mImagePathList = new ArrayList<String>();
+	private List<Bitmap> mCommodityImageList = new ArrayList<Bitmap>();
+	private List<ThingsImage> mThingsImages = new ArrayList<ThingsImage>();
+	private int mGridViewHeight;
+	private CommodityImageGridViewAdapter mImageAdapter;
+	
+	private CreateBmpFactory mCreateBmpFactory;
 	@Override
 	protected void setLayoutView() {
 		setContentView(R.layout.activity_publish_layout);
@@ -75,9 +100,10 @@ public class PublishThingsActivity extends BasePageActivity implements
 	protected void findViews() {
 		mEditThingsDdescription = (EditText) findViewById(R.id.edit_publish_commodity_description);
 		mEditThingsPrice = (EditText) findViewById(R.id.edit_publish_commodity_price);
-		mImageView = (ImageView) findViewById(R.id.gv_publish_commodityimage_show);
+		mGvCommodityImage =(GridView) findViewById(R.id.gv_publish_commodityimage_show);
 		mThingsPublisherLocationTv = (TextView) findViewById(R.id.tv_publish_commodity_location);
 		mFrameLayout = (FrameLayout) findViewById(R.id.framelayout_publish_location);
+		mScrollView = (ScrollView) findViewById(R.id.sv_publich);
 	}
 
 	@Override
@@ -86,8 +112,9 @@ public class PublishThingsActivity extends BasePageActivity implements
 		mUserLogic = new UserLogic(mContext);
 		mThingsLogic = new ThingsLogic(mContext);
 		mImageLogic = new ThingsImageLogic(mContext);
-		mBmpFactory = new CreateBmpFactory(PublishThingsActivity.this);
-
+		mCreateBmpFactory = new CreateBmpFactory(this);
+		setGridViewCommodityImage();
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -95,30 +122,10 @@ public class PublishThingsActivity extends BasePageActivity implements
 			mEditThingsDdescription.setText(mThings.getContent());
 			mEditThingsPrice.setText("" + mThings.getPrice());
 			mThingsPublisherLocationTv.setText(mThings.getLocationName());
-			if (null != mThings.getThingsImage()) {
-				mImageView.setVisibility(View.VISIBLE);
-				ImageLoader
-						.getInstance()
-						.displayImage(
-								mThings.getThingsImage().getFileUrl(mContext) == null ? ""
-										: mThings.getThingsImage().getFileUrl(
-												mContext),
-								mImageView,
-								MyApplication.getInstance().getOptions(
-										R.drawable.bg_pic_loading),
-								new SimpleImageLoadingListener() {
-									@Override
-									public void onLoadingComplete(
-											String imageUri, View view,
-											Bitmap loadedImage) {
-										super.onLoadingComplete(imageUri, view,
-												loadedImage);
-										LogUtils.i(TAG, "加载图片" + imageUri
-												+ "成功");
-
-									}
-
-								});
+			if (null != mThings.getThingsImages()) {
+				mGvCommodityImage.setVisibility(View.VISIBLE);
+				mThingsImages = mThings.getThingsImages();
+				//mGvCommodityImage.setAdapter(new MainThingsGridViewAdapter(mContext, mThings.getThingsImages()));
 			}
 			actionBar.setTitle("修改物品");
 
@@ -133,12 +140,7 @@ public class PublishThingsActivity extends BasePageActivity implements
 		mThingsLogic.setOnIsUpdateListener(this);
 		mImageLogic.setIsUploadImageListener(this);
 		mThingsLogic.setOnIsPublishListener(this);
-		mImageView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mBmpFactory.OpenGallery();
-			}
-		});
+		setGridViewOnClickListener();
 
 		mFrameLayout.setOnClickListener(new OnClickListener() {
 
@@ -150,7 +152,50 @@ public class PublishThingsActivity extends BasePageActivity implements
 			}
 		});
 	}
+	private void setGridViewOnClickListener() {
+		mGvCommodityImage
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						if (position == mCommodityImageList.size()) {
+							if (mCreateBmpFactory.hasSdcard()) {
+								Intent intent = new Intent(mContext,
+										NativeImageActivity.class);
+								Bundle bundle = new Bundle();
+								NativeImageAlbum album = new NativeImageAlbum();
+								album.setBitList(mNativeImageItems);
+								bundle.putSerializable("mAblum", album);
+								intent.putExtras(bundle);
+								startActivity(intent);
+							} else {
+								Toast.makeText(mContext, "SdCard不存在",
+										Toast.LENGTH_SHORT).show();
+							}
+						} else {
+							Intent intent = new Intent(mContext,
+									ShowBigImageActivity.class);
+							NativeImageAlbum album = new NativeImageAlbum();
+							album.setBitList(mNativeImageItems);
+							Bundle bundle = new Bundle();
+							bundle.putSerializable("imageAlbum", album);
+							bundle.putInt("position", position);
+							intent.putExtras(bundle);
+							startActivity(intent);
+						}
+					}
+				});
 
+		mGvCommodityImage
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View view, int position, long id) {
+
+						return false;
+					}
+				});
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
@@ -167,21 +212,20 @@ public class PublishThingsActivity extends BasePageActivity implements
 				break;
 			}
 		}
-		if (null != mBmpFactory
-				.getBitmapFilePath(requestCode, resultCode, data)) {
-			mImagePath = mBmpFactory.getBitmapFilePath(requestCode, resultCode,
-					data);
-			mImageView.setImageBitmap(mBmpFactory.getBitmapByOpt(mImagePath));
-		}
-
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	protected void fetchData() {
-
+		
 	}
-
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		getImageFromOtherActivity();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.publish_action_menu, menu);
@@ -235,11 +279,11 @@ public class PublishThingsActivity extends BasePageActivity implements
 			return;
 		}
 		if (null == mThings) {
-			uploadImage(mImagePath);
-		} else if (null == mImagePath) {
+			uploadImage();
+		} else if (0 == mImagePathList.size()) {
 			updateThings(mThings);
 		} else {
-			uploadImage(mImagePath);
+			uploadImage();
 		}
 
 	}
@@ -257,18 +301,14 @@ public class PublishThingsActivity extends BasePageActivity implements
 	}
 
 	private Things initThings(final String thingsDescription,
-			final String price, final ThingsImage image) {
+			final String price, final List<ThingsImage> images) {
 		User user = mUserLogic.getCurrentUser();
 		final Things things = new Things();
 		things.setAuthor(user);
 		things.setContent(thingsDescription);
 		things.setPrice(Integer.valueOf(price));
-		if (image != null) {
-			List<ThingsImage> images = new ArrayList<ThingsImage>();
-			images.add(image);
-			images.add(image);
+		if (null != images) {
 			things.setThingsImages(images);
-			//things.setThingsImage(image);
 		}
 		if (null != mLocation) {
 			things.setThingsLocation(mLocation);
@@ -282,8 +322,9 @@ public class PublishThingsActivity extends BasePageActivity implements
 		return things;
 	}
 
-	private void uploadImage(String path) {
-
+	private void uploadImage() {
+		String path = mImagePathList.get(0);
+		mImagePathList.remove(path);
 		mImageLogic.upLoadImageWithPath(path);
 	}
 
@@ -294,13 +335,20 @@ public class PublishThingsActivity extends BasePageActivity implements
 
 	@Override
 	public void onUploadImageSuccess(ThingsImage image) {
-		if (null == mThings) {
-			Things things = initThings(mEditThingsDdescription.getText()
-					.toString(), mEditThingsPrice.getText().toString(), image);
-			publishNewThings(things);
+		if (null != image) { 
+			mThingsImages.add(image);
+		}
+		if (mImagePathList.size() == 0) {
+			if (null == mThings) {
+				Things things = initThings(mEditThingsDdescription.getText()
+						.toString(), mEditThingsPrice.getText().toString(), mThingsImages);
+				publishNewThings(things);
+			} else {
+				mThings.setThingsImages(mThingsImages);
+				updateThings(mThings);
+			}
 		} else {
-			mThings.setThingsImage(image);
-			updateThings(mThings);
+			uploadImage();
 		}
 
 	}
@@ -332,31 +380,6 @@ public class PublishThingsActivity extends BasePageActivity implements
 				+ msg);
 		LogUtils.i(TAG, "创建失败。" + msg);
 	}
-
-	private boolean isShouldPublish() {
-
-		// 商品描述
-		if (mEditThingsDdescription.getText().toString().equals("")) {
-			return false;
-		}
-
-		// 商品价格
-		if (mEditThingsPrice.getText().toString().equals("")) {
-			return false;
-		}
-		// 谁可以看到的设置
-		if (null == mImageView && null == mThings
-				&& null == mThings.getThingsImage()) {
-			return false;
-		}
-
-		if (null == mLocationName && null == mThings.getLocationName()) {
-			return false;
-		}
-
-		return true;
-	}
-
 	@Override
 	public void onUpdateSuccess() {
 		ActivityUtils.toastShowBottom(PublishThingsActivity.this, "修改成功！");
@@ -371,5 +394,169 @@ public class PublishThingsActivity extends BasePageActivity implements
 				+ msg);
 		LogUtils.i(TAG, "创建失败。" + msg);
 	}
+	private void getImageFromOtherActivity() {
+		Bundle bundle = getIntent().getExtras();
+		if (bundle == null)
+			return;
+
+		NativeImageAlbum album = (NativeImageAlbum) bundle
+				.getSerializable("mAblum");
+		if (album == null)
+			return;
+
+		setNativeImageItemList(album);
+
+		setThumbnailBitmapList(mNativeImageItems);
+
+		resetGridViewHeight();
+		mImageAdapter.notifyDataSetChanged();
+	}
+	
+	private void setNativeImageItemList(NativeImageAlbum album) {
+		mNativeImageItems = album.getBitList();
+		mImagePathList.removeAll(mImagePathList);
+		for (int i = 0; i < mNativeImageItems.size(); i++) {
+			mImagePathList.add(mNativeImageItems.get(i).getPath());
+		}
+	}
+	private void setGridViewCommodityImage() {
+		mImageAdapter = new CommodityImageGridViewAdapter(mContext,
+				mCommodityImageList);
+		mGvCommodityImage.setAdapter(mImageAdapter);
+	}
+	private void resetGridViewHeight() {
+		if (mGridViewHeight == 0) {
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+			mGridViewHeight = dm.widthPixels / 4;
+		}
+		int i = mCommodityImageList.size() / 4 + 1;
+		RelativeLayout.LayoutParams linearParams = (RelativeLayout.LayoutParams) mGvCommodityImage
+				.getLayoutParams(); // 取控件mGrid当前的布局参数
+		linearParams.height = mGridViewHeight * i;// 当控件的高强制设成80象素
+		mGvCommodityImage.setLayoutParams(linearParams); // 使设置好的布局参数应用到控件
+
+	}
+	
+	private void getKeyBoardHeight() {
+		final RelativeLayout content = (RelativeLayout) findViewById(R.id.relativeLayout_publish);
+		content.getViewTreeObserver().addOnGlobalLayoutListener(
+				new ViewTreeObserver.OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						if (keyBoardHeight <= 100) {
+							Rect r = new Rect();
+							content.getWindowVisibleDisplayFrame(r);
+
+							int screenHeight = content.getRootView()
+									.getHeight();
+							int heightDifference = screenHeight
+									- (r.bottom - r.top);
+							int resourceId = getResources().getIdentifier(
+									"status_bar_height", "dimen", "android");
+							if (resourceId > 0) {
+								heightDifference -= getResources()
+										.getDimensionPixelSize(resourceId);
+							}
+							if (heightDifference > 100) {
+								keyBoardHeight = heightDifference;
+							}
+						}
+						if (isHideEditText()) {
+							Rect r = new Rect();
+							content.getWindowVisibleDisplayFrame(r);
+							mScrollView.scrollTo(0, r.bottom);
+						}
+					}
+				});
+	}
+	
+	private Boolean isHideEditText() {
+		View v = getCurrentFocus();
+		if (v != null && (v instanceof EditText)) {
+			int[] leftTop = { 0, 0 };
+			v.getLocationInWindow(leftTop);
+			DeviceSize deviceSize = new DeviceSize(mContext);
+			int top = deviceSize.getmHeight() - leftTop[1] - v.getHeight();
+			if (top < keyBoardHeight) {
+				return true;
+			}
+		}
+		return false;
+	}
+	private boolean isShouldPublish() {
+
+		// 商品描述
+		if (mEditThingsDdescription.getText().toString().equals("")) {
+			return false;
+		}
+
+		// 商品价格
+		if (mEditThingsPrice.getText().toString().equals("")) {
+			return false;
+		}
+		// 商品图片
+		if (mCommodityImageList.size() == 0) {
+				return false;
+		}
+
+		if (null == mLocationName && null == mThings.getLocationName()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+			View v = getCurrentFocus();
+			if (isShouldHideInput(v, ev)) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				if (imm != null) {
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				}
+			}
+			return super.dispatchTouchEvent(ev);
+		}
+		// 必不可少，否则所有的组件都不会有TouchEvent了
+		if (getWindow().superDispatchTouchEvent(ev)) {
+			return true;
+		}
+		return onTouchEvent(ev);
+	}
+	
+	private boolean isShouldHideInput(View v, MotionEvent event) {
+		if (v != null && (v instanceof EditText)) {
+			int[] leftTop = { 0, 0 };
+			// 获取输入框当前的location位置
+			v.getLocationInWindow(leftTop);
+			int left = leftTop[0];
+			int top = leftTop[1];
+			int bottom = top + v.getHeight();
+			int right = left + v.getWidth();
+			if (event.getX() > left && event.getX() < right
+					&& event.getY() > top && event.getY() < bottom) {
+				// 点击的是输入框区域，保留点击EditText的事件
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void setThumbnailBitmapList(List<NativeImageItem> items) {
+		mCommodityImageList.removeAll(mCommodityImageList);
+		for (int i = 0; i < items.size(); i++) {
+			Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
+					mContext.getContentResolver(), items.get(i).getimageID(),
+					Thumbnails.MICRO_KIND, null);
+			if (bitmap != null) {
+				mCommodityImageList.add(bitmap);
+			}
+		}
+	}
+
 
 }

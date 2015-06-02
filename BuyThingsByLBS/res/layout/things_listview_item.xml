@@ -20,8 +20,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/user_logo"
         android:layout_margin="4dp"
-         android:textSize="20sp"
-        android:text="599" />
+        android:text="599"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/things_price_tv"
@@ -30,9 +30,9 @@
         android:layout_alignTop="@id/user_logo"
         android:layout_margin="4dp"
         android:layout_toLeftOf="@id/things_price_text"
-        android:textSize="20sp"
+        android:text="￥"
         android:textColor="@color/price_text_color"
-        android:text="￥" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/user_name"
@@ -48,9 +48,22 @@
         android:id="@+id/content_image_fl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user_logo" >
+        android:layout_below="@id/user_logo"
+        android:descendantFocusability="blocksDescendants"
+         >
 
-        <ImageView
+        <com.bishe.view.CommodityPhotoGridView
+            android:id="@+id/gv_content_image_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="2dp"
+            android:listSelector="@drawable/grid_view_item_selector"
+            android:numColumns="4"
+            android:scaleType="fitXY"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="1dp" />
+        <!--
+             <ImageView
             android:id="@+id/content_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -61,6 +74,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/bg_pic_loading"
             android:visibility="visible" />
+        -->
 
         <ImageView
             android:id="@+id/content_buy_tag"
@@ -101,34 +115,34 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/things_phone_rl" >
 
-        <ImageView 
+        <ImageView
             android:id="@+id/user_location_iv"
             android:layout_width="10dp"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="4dp"
-            android:src="@drawable/home_lbs_2x"
-            />
+            android:src="@drawable/home_lbs_2x" />
+
         <TextView
             android:id="@+id/things_location_text"
             style="@style/TextTheme"
-            android:layout_toRightOf="@id/user_location_iv"
             android:layout_margin="4dp"
+            android:layout_toRightOf="@id/user_location_iv"
             android:text="广州" />
 
-          <TextView
+        <TextView
             android:id="@+id/things_distance_tv"
             style="@style/TextTheme"
-            android:layout_margin="4dp"
             android:layout_below="@id/things_location_text"
-            android:text="距离你有：" 
-            android:textColor="@color/price_text_color"
-            />
+            android:layout_margin="4dp"
+            android:text="距离你有："
+            android:textColor="@color/price_text_color" />
+
         <TextView
             android:id="@+id/things_distance_text"
             style="@style/TextTheme"
-            android:layout_margin="4dp"
             android:layout_below="@id/things_location_text"
+            android:layout_margin="4dp"
             android:layout_toRightOf="@id/things_distance_tv"
             android:text="500米" />
     </RelativeLayout>
